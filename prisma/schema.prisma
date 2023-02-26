@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id
+  typeId    String    @map("type_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  name      String    @unique
+  photo     String?
+
+  VeganType VeganType @relation(fields: [typeId], references: [id])
+
+  Recipe         Recipe[]
+  Meal           Meal[]
+  RecipeBookmark RecipeBookmark[]
+
+  @@map("user")
+}
+
+model Recipe {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  typeId          String    @map("type_id")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+  name            String
+  photo           String?
+  duration        Int       @default(0)
+  carbonFootprint Decimal   @default(0) @map("carbon_footprint")
+
+  User      User      @relation(fields: [userId], references: [id])
+  VeganType VeganType @relation(fields: [typeId], references: [id])
+
+  RecipeStep       RecipeStep[]
+  RecipeIngredient RecipeIngredient[]
+  Meal             Meal[]
+  RecipeBookmark   RecipeBookmark[]
+
+  @@map("recipe")
+}
+
+model RecipeStep {
+  id          String   @id @default(uuid())
+  recipeId    String   @map("recipe_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  index       Int      @default(1)
+  description String
+  photo       String?
+
+  Recipe Recipe @relation(fields: [recipeId], references: [id])
+
+  @@unique([recipeId, index])
+  @@map("recipe_step")
+}
+
+model Meal {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  recipeId    String   @map("recipe_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  title       String
+  description String?
+  photo       String?
+  time        DateTime
+
+  Rser   User   @relation(fields: [userId], references: [id])
+  Recipe Recipe @relation(fields: [recipeId], references: [id])
+
+  @@map("meal")
+}
+
+model RecipeBookmark {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  recipeId  String   @map("recipe_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Rser   User   @relation(fields: [userId], references: [id])
+  Recipe Recipe @relation(fields: [recipeId], references: [id])
+
+  @@map("recipe_bookmark")
+}
+
+model Ingredient {
+  id         String @id @default(uuid())
+  categoryId String @map("category_id")
+  name       String
+
+  IngredientCategory IngredientCategory @relation(fields: [categoryId], references: [id])
+
+  RecipeIngredient RecipeIngredient[]
+
+  @@map("ingredient")
+}
+
+model IngredientCategory {
+  id              String  @id @default(uuid())
+  name            String
+  carbonFootprint Decimal @default(0) @map("carbon_footprint")
+
+  Ingredient                  Ingredient[]
+  VeganTypeIngredientCategory VeganTypeIngredientCategory[]
+
+  @@map("ingredient_category")
+}
+
+model RecipeIngredient {
+  id           String   @id @default(uuid())
+  recipeId     String   @map("recipe_id")
+  ingredientId String   @map("ingredient_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  weight       Int      @default(0)
+
+  Recipe     Recipe     @relation(fields: [recipeId], references: [id])
+  Ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@map("recipe_ingredient")
+}
+
+model VeganType {
+  id   String @id @default(uuid())
+  name String
+
+  Recipe                      Recipe[]
+  User                        User[]
+  VeganTypeIngredientCategory VeganTypeIngredientCategory[]
+
+  @@map("vegan_type")
+}
+
+model VeganTypeIngredientCategory {
+  id         String @id @default(uuid())
+  typeId     String @map("type_id")
+  categoryId String @map("category_id")
+
+  VeganType          VeganType          @relation(fields: [typeId], references: [id])
+  IngredientCategory IngredientCategory @relation(fields: [categoryId], references: [id])
+
+  @@map("vegan_type_ingredient_category")
+}
