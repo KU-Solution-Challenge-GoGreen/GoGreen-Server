@@ -8,8 +8,8 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start:local": "cross-env NODE_ENV=local nest start --watch",
+    "start:dev": "cross-env NODE_ENV=dev nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -17,7 +17,12 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "db:init:local": "docker-compose --env-file .local.env -f postgres.yml up -d",
+    "db:save:local": "dotenv -e .local.env -- yarn prisma migrate dev",
+    "db:save:dev": "dotenv -e .dev.env -- yarn prisma migrate dev",
+    "deploy:dev": "NODE_ENV=dev node dist/src/main.js",
+    "deploy:prod": "NODE_ENV=prod node dist/src/main.js"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
