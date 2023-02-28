@@ -1,21 +1,22 @@
 import * as admin from 'firebase-admin';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
+import { FirebaseAdmin } from './interface/firebase-admin.interface';
 
 @Injectable()
 export class FirebaseService {
-  private readonly firebase_app;
+  private readonly firebaseAdmin: FirebaseAdmin;
 
   constructor(private readonly config: ConfigService) {
-    this.firebase_app = admin.initializeApp({
+    this.firebaseAdmin = admin.initializeApp({
       credential: admin.credential.cert(
         require('../../../firebase-account.json'),
       ),
     });
   }
 
-  verifyToken(idToken: string): string | Promise<string> {
-    return this.firebase_app
+  async verifyToken(idToken: string): Promise<string> {
+    return this.firebaseAdmin
       .auth()
       .verifyIdToken(idToken)
       .then((decodedToken) => {
