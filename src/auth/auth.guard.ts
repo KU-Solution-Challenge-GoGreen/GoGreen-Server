@@ -7,6 +7,7 @@ import {
 import { FirebaseService } from './firebase/firebase.service';
 import { PrismaService } from '../common/services/prisma.service';
 import { UserInfo } from './type/user-info.type';
+import { RequestWithAuth } from './type/request-with-auth';
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {
@@ -16,8 +17,8 @@ export class FirebaseAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const headerToken = request.headers['Authorization'];
+    const request: RequestWithAuth = context.switchToHttp().getRequest();
+    const headerToken = request.headers.authorization;
     if (!headerToken) {
       throw new UnauthorizedException('토큰이 없습니다.');
     }
@@ -25,7 +26,7 @@ export class FirebaseAuthGuard implements CanActivate {
     const token = headerToken.split('Bearer ')[1];
     const userId = await this.firebaseService.getUsrIdByVerifyToken(token);
     if (!userId) {
-      throw new UnauthorizedException('잘못된 토큰 방식입니다.');
+      throw new UnauthorizedException('토큰이 유효하지 않습니다');
     }
 
     const user: UserInfo | null = await this.prisma.user.findFirst({
@@ -45,7 +46,7 @@ export class FirebaseAuthGuard implements CanActivate {
       throw new UnauthorizedException('존재하지 않는 사용자입니다.');
     }
 
-    request.user = userId;
+    request.user = user;
     return true;
   }
 }
