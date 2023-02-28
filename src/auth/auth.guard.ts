@@ -24,7 +24,8 @@ export class FirebaseAuthGuard implements CanActivate {
     }
 
     const token = headerToken.split('Bearer ')[1];
-    const userId = await this.firebaseService.getUsrIdByVerifyToken(token);
+    const userId: string | null =
+      await this.firebaseService.getUsrIdByVerifyToken(token);
     if (!userId) {
       throw new UnauthorizedException('토큰이 유효하지 않습니다');
     }

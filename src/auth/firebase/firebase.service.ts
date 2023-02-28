@@ -7,18 +7,15 @@ export class FirebaseService {
     @Inject('FirebaseAdmin') private readonly firebaseAdmin: FirebaseAdmin,
   ) {}
 
-  async getUsrIdByVerifyToken(idToken: string): Promise<string> {
-    return this.firebaseAdmin
-      .auth()
-      .verifyIdToken(idToken)
-      .then((decodedToken) => {
-        const uid = decodedToken.uid;
-        console.log(decodedToken);
-        return uid;
-      })
-      .catch((error) => {
-        console.log(error);
-        return 'error';
-      });
+  async getUsrIdByVerifyToken(idToken: string): Promise<string | null> {
+    try {
+      const decodedToken = await this.firebaseAdmin
+        .auth()
+        .verifyIdToken(idToken);
+      return decodedToken.uid;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 }
