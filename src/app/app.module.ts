@@ -3,9 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from '../common/middlewares/logger.middlewares';
 import { configModule } from './modules/config.module';
+import { CommonModule } from '../common/common.module';
 
 @Module({
-  imports: [configModule],
+  imports: [configModule, CommonModule],
   controllers: [AppController],
   providers: [AppService],
 })
