@@ -3,11 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from '../common/middlewares/logger.middlewares';
 import { configModule } from './modules/config.module';
-import { FirebaseModule } from 'src/auth/firebase/firebase.module';
 import { CommonModule } from '../common/common.module';
+import { AuthModule } from '../auth/auth.module';
+import { FirebaseModule } from '../auth/firebase/firebase.module';
 
 @Module({
-  imports: [configModule, CommonModule, FirebaseModule],
+  imports: [configModule, CommonModule, FirebaseModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
