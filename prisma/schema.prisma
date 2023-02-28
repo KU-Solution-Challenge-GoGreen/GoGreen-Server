@@ -77,7 +77,7 @@ model Meal {
   photo       String?
   time        DateTime
 
-  Rser   User   @relation(fields: [userId], references: [id])
+  User   User   @relation(fields: [userId], references: [id])
   Recipe Recipe @relation(fields: [recipeId], references: [id])
 
   @@map("meal")
@@ -90,7 +90,7 @@ model RecipeBookmark {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  Rser   User   @relation(fields: [userId], references: [id])
+  User   User   @relation(fields: [userId], references: [id])
   Recipe Recipe @relation(fields: [recipeId], references: [id])
 
   @@map("recipe_bookmark")
