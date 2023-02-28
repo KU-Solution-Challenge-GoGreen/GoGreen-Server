@@ -8,4 +8,7 @@ export class AppService {
   getLogined(): string {
     return 'Logined GoGreen!\t';
   }
+  getInput(input: string): string {
+    return 'Hello GoGreen!\t' + input;
+  }
 }

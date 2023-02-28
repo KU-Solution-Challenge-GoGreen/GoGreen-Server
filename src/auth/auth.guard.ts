@@ -14,10 +14,10 @@ export class FirebaseAuthGuard implements CanActivate {
       }
       const token = headerToken.split('Bearer ')[1];
       const user = await this.firebaseService.verifyToken(token);
-      console.log('user : ', user);
       if (user === 'error') {
         return false;
       }
+      request.user = user;
       return true;
     } catch (e) {
       console.log(e);
