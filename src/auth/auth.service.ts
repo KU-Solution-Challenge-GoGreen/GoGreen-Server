@@ -4,4 +4,8 @@ import { AuthRepository } from './auth.repository';
 @Injectable()
 export class AuthService {
   constructor(private readonly authRepository: AuthRepository) {}
+
+  async checkDuplicateName(name: string): Promise<boolean> {
+    return this.authRepository.checkDuplicateName(name);
+  }
 }
