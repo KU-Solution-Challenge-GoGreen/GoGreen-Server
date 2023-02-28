@@ -8,7 +8,9 @@ export class FirebaseService {
 
   constructor(private readonly config: ConfigService) {
     this.firebase_app = admin.initializeApp({
-      credential: admin.credential.cert(require('../../../firebase-account.json')),
+      credential: admin.credential.cert(
+        require('../../../firebase-account.json'),
+      ),
     });
   }
 
