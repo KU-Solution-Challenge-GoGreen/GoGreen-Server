@@ -7,7 +7,7 @@ export class FirebaseService {
     @Inject('FirebaseAdmin') private readonly firebaseAdmin: FirebaseAdmin,
   ) {}
 
-  async verifyToken(idToken: string): Promise<string> {
+  async getUsrIdByVerifyToken(idToken: string): Promise<string> {
     return this.firebaseAdmin
       .auth()
       .verifyIdToken(idToken)
