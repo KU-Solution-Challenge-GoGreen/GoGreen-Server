@@ -3,10 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from '../common/middlewares/logger.middlewares';
 import { configModule } from './modules/config.module';
+import { FirebaseModule } from 'src/auth/firebase/firebase.module';
 import { CommonModule } from '../common/common.module';
 
 @Module({
-  imports: [configModule, CommonModule],
+  imports: [configModule, CommonModule, FirebaseModule],
   controllers: [AppController],
   providers: [AppService],
 })

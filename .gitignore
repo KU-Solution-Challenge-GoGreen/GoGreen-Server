@@ -12,6 +12,7 @@
 ### Firebase Patch ###
 .runtimeconfig.json
 .firebase/
+firebase-account.json
 
 ### macOS ###
 # General
