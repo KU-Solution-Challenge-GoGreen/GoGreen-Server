@@ -16,5 +16,5 @@ export class RegisterPayload {
     type: String,
     description: '비건 타입 Id',
   })
-  veganTypeId!: string;
+  typeId!: string;
 }

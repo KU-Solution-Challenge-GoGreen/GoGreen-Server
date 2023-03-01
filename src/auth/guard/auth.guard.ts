@@ -7,7 +7,7 @@ import {
 import { FirebaseService } from '../firebase/firebase.service';
 import { PrismaService } from '../../common/services/prisma.service';
 import { UserInfo } from '../type/user-info.type';
-import { RequestWithAuth } from '../type/request-with-auth';
+import { RequestWithAuth } from '../type/request-with.auth.type';
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {

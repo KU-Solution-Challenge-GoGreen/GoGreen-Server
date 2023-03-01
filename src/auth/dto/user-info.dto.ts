@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UserInfoWithType } from '../type/user-info-with-type.type';
 
 class VeganTypeDto {
   @ApiProperty({
@@ -38,4 +39,16 @@ export class UserInfoDto {
     description: '유저 사진',
   })
   photo!: string | null;
+
+  static of(data: UserInfoWithType): UserInfoDto {
+    return {
+      id: data.id,
+      name: data.name,
+      photo: data.photo,
+      veganType: {
+        id: data.VeganType.id,
+        name: data.VeganType.name,
+      },
+    };
+  }
 }

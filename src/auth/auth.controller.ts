@@ -9,9 +9,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { CheckDuplicateDto } from './dto/check-duplicate.dto';
-import { RequestWithAuth } from './type/request-with-auth';
+import { RequestWithAuth } from './type/request-with.auth.type';
 import { FirebaseService } from './firebase/firebase.service';
 import { UserInfoDto } from './dto/user-info.dto';
 import { RegisterPayload } from './payload/register.payload';
@@ -20,10 +20,11 @@ import { RegisterPayload } from './payload/register.payload';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    @Inject() private readonly firebaseService: FirebaseService,
+    private readonly firebaseService: FirebaseService,
   ) {}
 
   @Post('register')
+  @ApiBearerAuth()
   @ApiOperation({ summary: '회원가입합니다.' })
   @ApiOkResponse({ type: UserInfoDto })
   async register(
@@ -40,7 +41,9 @@ export class AuthController {
       throw new UnauthorizedException();
     }
 
-    return this.authService.register(createUserPayload, userId);
+    return UserInfoDto.of(
+      await this.authService.register(createUserPayload, userId),
+    );
   }
 
   @Get('name/:name/duplicate')
