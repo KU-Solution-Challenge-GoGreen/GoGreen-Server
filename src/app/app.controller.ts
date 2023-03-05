@@ -1,5 +1,5 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { FirebaseAuthGuard } from 'src/auth/auth.guard';
+import { FirebaseAuthGuard } from 'src/auth/guard/auth.guard';
 import { CurrentUser } from 'src/auth/decorator/user.decorator';
 import { AppService } from './app.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
