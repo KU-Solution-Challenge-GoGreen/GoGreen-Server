@@ -9,7 +9,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiBearerAuth, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CheckDuplicateDto } from './dto/check-duplicate.dto';
 import { RequestWithAuth } from './type/request-with.auth.type';
 import { FirebaseService } from './firebase/firebase.service';
@@ -17,6 +22,7 @@ import { UserInfoDto } from './dto/user-info.dto';
 import { RegisterPayload } from './payload/register.payload';
 
 @Controller('auth')
+@ApiTags('Auth API')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

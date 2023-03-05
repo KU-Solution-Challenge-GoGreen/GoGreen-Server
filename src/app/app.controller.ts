@@ -2,9 +2,10 @@ import { Controller, Get, UseGuards } from '@nestjs/common';
 import { FirebaseAuthGuard } from 'src/auth/guard/auth.guard';
 import { CurrentUser } from 'src/auth/decorator/user.decorator';
 import { AppService } from './app.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller()
+@ApiTags('Root API')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
