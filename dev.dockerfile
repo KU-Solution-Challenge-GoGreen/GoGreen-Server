@@ -11,7 +11,7 @@ RUN yarn install
 COPY . .
 
 RUN yarn global add dotenv-cli
-RUN yarn prisma generates
+RUN yarn prisma generate
 
 RUN yarn build && rm -rf node_modules && yarn install --production
 
