@@ -9,7 +9,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiBearerAuth, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CheckDuplicateDto } from './dto/check-duplicate.dto';
 import { RequestWithAuth } from './type/request-with.auth.type';
 import { FirebaseService } from './firebase/firebase.service';
@@ -17,6 +22,7 @@ import { UserInfoDto } from './dto/user-info.dto';
 import { RegisterPayload } from './payload/register.payload';
 
 @Controller('auth')
+@ApiTags('Auth API')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -31,6 +37,7 @@ export class AuthController {
     @Req() req: RequestWithAuth,
     @Body() createUserPayload: RegisterPayload,
   ): Promise<UserInfoDto> {
+    // 회원가입은 DB에 유저 확인을 하지 않기 때문에 Guard를 거치지 않는다. 따라서, 직접 구현합니다.
     const authorization = req.headers.authorization;
     if (!authorization) {
       throw new UnauthorizedException();
