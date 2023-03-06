@@ -1,6 +1,11 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { IngredientService } from './ingredient.service';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { IngredientWithCategoryDto } from './dto/ingredient-with-category.dto';
 import { CategoryWithIngredientListDto } from './dto/category-with-ingredient-list.dto';
 import { BulkCreateDto } from '../common/dto/bulk-create.dto';
@@ -13,7 +18,7 @@ export class IngredientController {
 
   @Post('bulk')
   @ApiOperation({ summary: '재료 정보 일괄 등록' })
-  @ApiOkResponse({ type: BulkCreateDto })
+  @ApiCreatedResponse({ type: BulkCreateDto })
   async bulkCreateIngredient(
     @Body() payload: IngredientBulkCreatePayload,
   ): Promise<BulkCreateDto> {
