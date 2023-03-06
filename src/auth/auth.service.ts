@@ -15,10 +15,9 @@ export class AuthService {
     payload: RegisterPayload,
     userId: string,
   ): Promise<UserInfoWithType> {
-    const [isDuplicateName, isUserExist, isVeganTypeValid] = await Promise.all([
+    const [isDuplicateName, isUserExist] = await Promise.all([
       this.authRepository.checkDuplicateName(payload.name),
       this.authRepository.isUserExist(userId),
-      this.authRepository.isVeganTypeValid(payload.typeId),
     ]);
 
     if (isDuplicateName) {
@@ -29,14 +28,9 @@ export class AuthService {
       throw new ConflictException('이미 존재하는 사용자입니다.');
     }
 
-    if (!isVeganTypeValid) {
-      throw new NotFoundException('존재하지 않는 비건유형입니다.');
-    }
-
     return this.authRepository.register({
       id: userId,
       name: payload.name,
-      typeId: payload.typeId,
     });
   }
 

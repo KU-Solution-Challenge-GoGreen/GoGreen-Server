@@ -37,7 +37,6 @@ export class FirebaseAuthGuard implements CanActivate {
       },
       select: {
         id: true,
-        typeId: true,
         name: true,
         photo: true,
       },

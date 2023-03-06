@@ -9,12 +9,4 @@ export class RegisterPayload {
     description: '닉네임',
   })
   name!: string;
-
-  @IsDefined()
-  @IsString()
-  @ApiProperty({
-    type: String,
-    description: '비건 타입 Id',
-  })
-  typeId!: string;
 }

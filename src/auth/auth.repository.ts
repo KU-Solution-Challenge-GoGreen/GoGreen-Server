@@ -12,13 +12,11 @@ export class AuthRepository {
       data: {
         id: data.id,
         name: data.name,
-        typeId: data.typeId,
       },
       select: {
         id: true,
         name: true,
         photo: true,
-        VeganType: true,
       },
     });
   }
@@ -44,15 +42,5 @@ export class AuthRepository {
       },
     });
     return !!user;
-  }
-
-  async isVeganTypeValid(typeId: string): Promise<boolean> {
-    const veganType = await this.prisma.veganType.findUnique({
-      where: {
-        id: typeId,
-      },
-    });
-
-    return !!veganType;
   }
 }
