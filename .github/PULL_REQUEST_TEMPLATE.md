@@ -1,7 +1,5 @@
 ## Type
-
 PR 종류를 확인해 주세요.
-
 - [ ] Improvement
 - [ ] New feature
 - [ ] Bug fix
