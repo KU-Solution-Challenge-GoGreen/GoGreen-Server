@@ -6,4 +6,10 @@ export class BulkCreateDto {
     description: '성공한 데이터 개수',
   })
   count!: number;
+
+  static of(count: number): BulkCreateDto {
+    return {
+      count,
+    };
+  }
 }
