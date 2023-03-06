@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { CategoryWithIngredientList } from '../type/category-with-ingredient-list.type';
 
 export class IngredientDto {
   @ApiProperty({
@@ -38,4 +39,17 @@ export class CategoryWithIngredientListDto {
     description: '카테고리에 속한 재료 리스트',
   })
   ingredientList!: IngredientDto[];
+  static of(
+    category: CategoryWithIngredientList,
+  ): CategoryWithIngredientListDto {
+    return {
+      id: category.id,
+      name: category.name,
+      ingredientList: category.Ingredient.map((ingredient) => ({
+        id: ingredient.id,
+        name: ingredient.name,
+        carbonFootprint: ingredient.carbonFootprint,
+      })),
+    };
+  }
 }
