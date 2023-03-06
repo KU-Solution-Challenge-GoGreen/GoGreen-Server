@@ -12,14 +12,11 @@ datasource db {
 
 model User {
   id        String    @id
-  typeId    String    @map("type_id")
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
   name      String    @unique
   photo     String?
-
-  VeganType VeganType @relation(fields: [typeId], references: [id])
 
   Recipe         Recipe[]
   Meal           Meal[]
@@ -36,9 +33,8 @@ model Recipe {
   updatedAt       DateTime  @updatedAt @map("updated_at")
   deletedAt       DateTime? @map("deleted_at")
   name            String
-  photo           String?
   duration        Int       @default(0)
-  carbonFootprint Decimal   @default(0) @map("carbon_footprint")
+  carbonFootprint Float     @default(0) @map("carbon_footprint")
 
   User      User      @relation(fields: [userId], references: [id])
   VeganType VeganType @relation(fields: [typeId], references: [id])
@@ -97,9 +93,10 @@ model RecipeBookmark {
 }
 
 model Ingredient {
-  id         String @id @default(uuid())
-  categoryId String @map("category_id")
-  name       String
+  id              String @id @default(uuid())
+  categoryId      String @map("category_id")
+  name            String
+  carbonFootprint Float  @default(0) @map("carbon_footprint")
 
   IngredientCategory IngredientCategory @relation(fields: [categoryId], references: [id])
 
@@ -109,9 +106,8 @@ model Ingredient {
 }
 
 model IngredientCategory {
-  id              String  @id @default(uuid())
-  name            String
-  carbonFootprint Decimal @default(0) @map("carbon_footprint")
+  id   String @id @default(uuid())
+  name String
 
   Ingredient                  Ingredient[]
   VeganTypeIngredientCategory VeganTypeIngredientCategory[]
@@ -125,7 +121,6 @@ model RecipeIngredient {
   ingredientId String   @map("ingredient_id")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
-  weight       Int      @default(0)
 
   Recipe     Recipe     @relation(fields: [recipeId], references: [id])
   Ingredient Ingredient @relation(fields: [ingredientId], references: [id])
@@ -138,7 +133,6 @@ model VeganType {
   name String
 
   Recipe                      Recipe[]
-  User                        User[]
   VeganTypeIngredientCategory VeganTypeIngredientCategory[]
 
   @@map("vegan_type")
