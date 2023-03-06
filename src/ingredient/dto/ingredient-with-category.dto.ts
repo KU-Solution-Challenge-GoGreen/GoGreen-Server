@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IngredientWithCategory } from '../type/ingredient-with-category.type';
 
 export class IngredientCategoryDto {
   @ApiProperty({
@@ -38,4 +39,16 @@ export class IngredientWithCategoryDto {
     description: '카테고리 정보',
   })
   category!: IngredientCategoryDto;
+
+  static of(ingredient: IngredientWithCategory): IngredientWithCategoryDto {
+    return {
+      id: ingredient.id,
+      name: ingredient.name,
+      carbonFootprint: ingredient.carbonFootprint,
+      category: {
+        id: ingredient.IngredientCategory.id,
+        name: ingredient.IngredientCategory.name,
+      },
+    };
+  }
 }
