@@ -1,6 +1,5 @@
 import { IsDefined, IsOptional, IsString } from 'class-validator';
-import { Transform } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateRecipeStepPayload {
   @IsDefined()
@@ -13,10 +12,10 @@ export class CreateRecipeStepPayload {
 
   @IsOptional()
   @IsString()
-  @Transform(({ value }) => (value === undefined ? null : value))
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
     description: '레시피 단계 photo',
+    nullable: true,
   })
-  photo!: number | null;
+  photo?: string | null;
 }

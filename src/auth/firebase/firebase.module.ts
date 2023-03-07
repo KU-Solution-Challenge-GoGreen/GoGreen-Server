@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { configModule } from 'src/app/modules/config.module';
 import { FirebaseService } from './firebase.service';
 import { ConfigService } from '@nestjs/config';
 import * as admin from 'firebase-admin';
 
+@Global()
 @Module({
   imports: [configModule],
   providers: [

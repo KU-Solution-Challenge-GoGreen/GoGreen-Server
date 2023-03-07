@@ -2,6 +2,9 @@ import { IngredientDto } from '../../ingredient/dto/category-with-ingredient-lis
 import { IngredientCategoryDto } from '../../ingredient/dto/ingredient-with-category.dto';
 import { RecipeStepDto } from './recipe-step.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { RecipeWithStep } from '../type/recipe-with-step.type';
+import { IngredientWithCategory } from '../../ingredient/type/ingredient-with-category.type';
+import * as _ from 'lodash';
 
 export class CreateRecipeDto {
   @ApiProperty({
@@ -51,4 +54,32 @@ export class CreateRecipeDto {
     description: '레시피 단계',
   })
   steps!: RecipeStepDto[];
+
+  static of(
+    recipe: RecipeWithStep,
+    ingredients: IngredientWithCategory[],
+  ): CreateRecipeDto {
+    return {
+      id: recipe.id,
+      userId: recipe.userId,
+      name: recipe.name,
+      carbonFootprint: recipe.carbonFootprint,
+      duration: recipe.duration,
+      ingredients: ingredients.map((ingredient) => ({
+        id: ingredient.id,
+        name: ingredient.name,
+        carbonFootprint: ingredient.carbonFootprint,
+      })),
+      //ingredient 안의 IngredientCategory.id를 뽑아서 중복을 제거
+      categories: _.uniqBy(ingredients, 'IngredientCategory.id').map(
+        (ingredient) => ingredient.IngredientCategory,
+      ),
+      steps: recipe.steps.map((step) => ({
+        id: step.id,
+        index: step.index,
+        description: step.description,
+        photo: step.photo,
+      })),
+    };
+  }
 }

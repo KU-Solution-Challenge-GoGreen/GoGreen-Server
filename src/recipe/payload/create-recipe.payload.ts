@@ -3,11 +3,11 @@ import {
   IsDefined,
   IsInt,
   IsString,
-  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { CreateRecipeStepPayload } from './create-recipe-step.payload';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
 export class CreateRecipePayload {
   @IsDefined()
@@ -38,6 +38,7 @@ export class CreateRecipePayload {
   @IsDefined()
   @IsArray()
   @ValidateNested({ each: true })
+  @Type(() => CreateRecipeStepPayload)
   @ApiProperty({
     type: [CreateRecipeStepPayload],
     description: '레시피 단계',

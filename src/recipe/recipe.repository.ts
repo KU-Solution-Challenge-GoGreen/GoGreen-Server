@@ -1,7 +1,81 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/services/prisma.service';
+import { IngredientWithCategory } from '../ingredient/type/ingredient-with-category.type';
+import { RecipeCreateInput } from './type/recipe-create-input.type';
+import { RecipeWithStep } from './type/recipe-with-step.type';
 
 @Injectable()
 export class RecipeRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  async createRecipe(data: RecipeCreateInput): Promise<RecipeWithStep> {
+    const recipe = await this.prisma.recipe.create({
+      data: {
+        name: data.name,
+        duration: data.duration,
+        carbonFootprint: data.carbonFootprint,
+        RecipeStep: {
+          createMany: {
+            data: data.steps,
+          },
+        },
+        userId: data.userId,
+        RecipeIngredient: {
+          connect: data.ingredientIds.map((ingredientId) => ({
+            id: ingredientId,
+          })),
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        duration: true,
+        carbonFootprint: true,
+        userId: true,
+        RecipeStep: {
+          select: {
+            id: true,
+            description: true,
+            index: true,
+            photo: true,
+          },
+        },
+      },
+    });
+
+    return {
+      id: recipe.id,
+      name: recipe.name,
+      duration: recipe.duration,
+      carbonFootprint: recipe.carbonFootprint,
+      userId: recipe.userId,
+      steps: recipe.RecipeStep.map((step) => ({
+        id: step.id,
+        description: step.description,
+        index: step.index,
+        photo: step.photo,
+      })),
+    };
+  }
+
+  async getIngredientsByIds(ids: string[]): Promise<IngredientWithCategory[]> {
+    return this.prisma.ingredient.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        carbonFootprint: true,
+        IngredientCategory: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+  }
 }
