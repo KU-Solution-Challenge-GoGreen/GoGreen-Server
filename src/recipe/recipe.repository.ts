@@ -21,9 +21,11 @@ export class RecipeRepository {
         },
         userId: data.userId,
         RecipeIngredient: {
-          connect: data.ingredientIds.map((ingredientId) => ({
-            id: ingredientId,
-          })),
+          createMany: {
+            data: data.ingredientIds.map((ingredientId) => ({
+              ingredientId,
+            })),
+          },
         },
       },
       select: {
