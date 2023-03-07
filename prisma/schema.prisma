@@ -28,7 +28,6 @@ model User {
 model Recipe {
   id              String    @id @default(uuid())
   userId          String    @map("user_id")
-  typeId          String    @map("type_id")
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
   deletedAt       DateTime? @map("deleted_at")
@@ -36,8 +35,7 @@ model Recipe {
   duration        Int       @default(0)
   carbonFootprint Float     @default(0) @map("carbon_footprint")
 
-  User      User      @relation(fields: [userId], references: [id])
-  VeganType VeganType @relation(fields: [typeId], references: [id])
+  User User @relation(fields: [userId], references: [id])
 
   RecipeStep       RecipeStep[]
   RecipeIngredient RecipeIngredient[]
@@ -132,7 +130,6 @@ model VeganType {
   id   String @id @default(uuid())
   name String
 
-  Recipe                      Recipe[]
   VeganTypeIngredientCategory VeganTypeIngredientCategory[]
 
   @@map("vegan_type")
