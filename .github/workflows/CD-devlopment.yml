@@ -4,7 +4,9 @@ name: Deploy to Google Cloud Run
 on:
   push:
     branches:
-      - "development"
+    branches-ignore:
+      - 'development'
+      - 'production'
 
 permissions:
   contents: read
