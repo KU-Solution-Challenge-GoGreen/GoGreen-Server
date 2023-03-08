@@ -87,7 +87,6 @@ export class RecipeRepository {
     });
 
     if (bookmark) {
-      // (userId, recipeId)로 unique constraint 안 걸려있어서 배열로 타입이 추정되는 듯.
       await this.prisma.recipeBookmark.delete({
         where: {
           id: bookmark.id,
