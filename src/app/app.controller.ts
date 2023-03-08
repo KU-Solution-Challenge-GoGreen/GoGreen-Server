@@ -7,6 +7,6 @@ export class AppController {
   @Get('health')
   @ApiOperation({ summary: 'Health check' })
   getHello(): string {
-    return 'Hello GoGreen!';
+    return 'Hello GoGreen Development!';
   }
 }
