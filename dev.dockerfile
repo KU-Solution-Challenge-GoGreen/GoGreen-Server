@@ -24,6 +24,6 @@ COPY --from=builder /usr/src/app/package.json ./package.json
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/.dev.env ./.dev.env
 
-EXPOSE 3000
+EXPOSE $PORT
 
 CMD ["yarn", "deploy:dev"]
