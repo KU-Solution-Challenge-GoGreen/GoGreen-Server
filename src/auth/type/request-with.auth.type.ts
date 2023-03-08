@@ -1,8 +1,8 @@
-import { UserInfo } from './user-info.type';
+import { UserData } from './user-data.type';
 
 export type RequestWithAuth = Request & {
   headers: {
     authorization?: string;
   };
-  user: UserInfo;
+  user: UserData;
 };

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { FirebaseService } from '../firebase/firebase.service';
 import { PrismaService } from '../../common/services/prisma.service';
-import { UserInfo } from '../type/user-info.type';
+import { UserData } from '../type/user-data.type';
 import { RequestWithAuth } from '../type/request-with.auth.type';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class FirebaseAuthGuard implements CanActivate {
       throw new UnauthorizedException('토큰이 유효하지 않습니다');
     }
 
-    const user: UserInfo | null = await this.prisma.user.findFirst({
+    const user: UserData | null = await this.prisma.user.findFirst({
       where: {
         deletedAt: null,
         id: userId,

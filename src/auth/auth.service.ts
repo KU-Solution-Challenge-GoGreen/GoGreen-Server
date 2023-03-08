@@ -1,20 +1,13 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { AuthRepository } from './auth.repository';
 import { RegisterPayload } from './payload/register.payload';
-import { UserInfoWithType } from './type/user-info-with-type.type';
+import { UserData } from './type/user-data.type';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly authRepository: AuthRepository) {}
 
-  async register(
-    payload: RegisterPayload,
-    userId: string,
-  ): Promise<UserInfoWithType> {
+  async register(payload: RegisterPayload, userId: string): Promise<UserData> {
     const [isDuplicateName, isUserExist] = await Promise.all([
       this.authRepository.checkDuplicateName(payload.name),
       this.authRepository.isUserExist(userId),

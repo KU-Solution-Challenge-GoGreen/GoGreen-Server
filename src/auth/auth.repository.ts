@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/services/prisma.service';
 import { RegisterData } from './type/register-data.type';
-import { UserInfoWithType } from './type/user-info-with-type.type';
+import { UserData } from './type/user-data.type';
 
 @Injectable()
 export class AuthRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async register(data: RegisterData): Promise<UserInfoWithType> {
+  async register(data: RegisterData): Promise<UserData> {
     return this.prisma.user.create({
       data: {
         id: data.id,
