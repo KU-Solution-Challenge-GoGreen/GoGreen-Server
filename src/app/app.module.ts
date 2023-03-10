@@ -7,6 +7,7 @@ import { AuthModule } from '../auth/auth.module';
 import { FirebaseModule } from '../auth/firebase/firebase.module';
 import { IngredientModule } from '../ingredient/ingredient.module';
 import { RecipeModule } from '../recipe/recipe.module';
+import { MealModule } from '../meal/meal.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RecipeModule } from '../recipe/recipe.module';
     AuthModule,
     IngredientModule,
     RecipeModule,
+    MealModule,
   ],
   controllers: [AppController],
 })
