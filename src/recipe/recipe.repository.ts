@@ -214,6 +214,36 @@ export class RecipeRepository {
     }));
   }
 
+  async getBookmarkedRecipeSummary(userId: string): Promise<RecipeSummary[]> {
+    const recipes = await this.prisma.recipe.findMany({
+      where: {
+        deletedAt: null,
+        RecipeBookmark: {
+          some: {
+            userId,
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        Meal: {
+          select: {
+            photo: true,
+          },
+        },
+      },
+    });
+
+    return recipes.map((recipe) => ({
+      id: recipe.id,
+      name: recipe.name,
+      photos: recipe.Meal.map((meal) => meal.photo).filter(
+        (photo) => photo !== null,
+      ) as string[],
+    }));
+  }
+
   async getIngredientsByIds(ids: string[]): Promise<IngredientWithCategory[]> {
     return this.prisma.ingredient.findMany({
       where: {

@@ -84,6 +84,16 @@ export class RecipeService {
     return RecipeSummaryListDto.of(recipes);
   }
 
+  async getBookmarkedRecipeSummary(
+    userId: string,
+  ): Promise<RecipeSummaryListDto> {
+    const recipes = await this.recipeRepository.getBookmarkedRecipeSummary(
+      userId,
+    );
+
+    return RecipeSummaryListDto.of(recipes);
+  }
+
   private calculateCarbonFootprint(
     ingredients: IngredientWithCategory[],
   ): number {

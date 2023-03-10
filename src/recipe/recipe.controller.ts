@@ -66,4 +66,15 @@ export class RecipeController {
   ): Promise<RecipeSummaryListDto> {
     return this.recipeService.getRecipeSummaryByUserId(userId);
   }
+
+  @Get('bookmark')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '북마크한 레시피 목록 조회' })
+  @ApiOkResponse({ type: [RecipeSummaryListDto] })
+  async getBookmarkedRecipeSummary(
+    @CurrentUser() user: UserData,
+  ): Promise<RecipeSummaryListDto> {
+    return this.recipeService.getBookmarkedRecipeSummary(user.id);
+  }
 }
