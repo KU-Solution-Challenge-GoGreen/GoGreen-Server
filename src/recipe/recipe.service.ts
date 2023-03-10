@@ -60,8 +60,14 @@ export class RecipeService {
     return RecipeBookmarkDto.of(result);
   }
 
-  async getRecipeById(id: string): Promise<RecipeDto> {
-    return {} as any;
+  async getRecipeById(id: string, userId: string): Promise<RecipeDto> {
+    const recipe = await this.recipeRepository.getRecipeById(id, userId);
+
+    if (!recipe) {
+      throw new NotFoundException('존재하지 않는 Recipe입니다.');
+    }
+
+    return RecipeDto.of(recipe);
   }
 
   private calculateCarbonFootprint(

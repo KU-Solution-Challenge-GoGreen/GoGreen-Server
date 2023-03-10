@@ -52,6 +52,6 @@ export class RecipeController {
     @CurrentUser() user: UserData,
     @Param('recipeId') recipeId: string,
   ): Promise<RecipeDto> {
-    return this.recipeService.getRecipeById(recipeId);
+    return this.recipeService.getRecipeById(recipeId, user.id);
   }
 }

@@ -2,7 +2,7 @@ import { IngredientDto } from '../../ingredient/dto/category-with-ingredient-lis
 import { IngredientCategoryDto } from '../../ingredient/dto/ingredient-with-category.dto';
 import { RecipeStepDto } from './recipe-step.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { RecipeWithStep } from '../type/recipe-with-step.type';
+import { RecipeData } from '../type/recipe-data.type';
 import { IngredientWithCategory } from '../../ingredient/type/ingredient-with-category.type';
 import * as _ from 'lodash';
 
@@ -56,7 +56,7 @@ export class CreateRecipeDto {
   steps!: RecipeStepDto[];
 
   static of(
-    recipe: RecipeWithStep,
+    recipe: RecipeData,
     ingredients: IngredientWithCategory[],
   ): CreateRecipeDto {
     return {
