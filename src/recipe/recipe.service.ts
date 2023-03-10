@@ -5,6 +5,7 @@ import { IngredientWithCategory } from '../ingredient/type/ingredient-with-categ
 import { RecipeCreateInput } from './type/recipe-create-input.type';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { RecipeBookmarkDto } from './dto/recipe-bookmark.dto';
+import { RecipeDto } from './dto/recipe.dto';
 
 @Injectable()
 export class RecipeService {
@@ -57,6 +58,10 @@ export class RecipeService {
     );
 
     return RecipeBookmarkDto.of(result);
+  }
+
+  async getRecipeById(id: string): Promise<RecipeDto> {
+    return {} as any;
   }
 
   private calculateCarbonFootprint(
