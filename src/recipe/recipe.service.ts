@@ -77,6 +77,7 @@ export class RecipeService {
   async getRecipeSummaryByUserId(
     userId: string,
   ): Promise<RecipeSummaryListDto> {
+    await this.validateUserId(userId);
     const recipes = await this.recipeRepository.getRecipeSummaryByUserId(
       userId,
     );
@@ -98,5 +99,12 @@ export class RecipeService {
     ingredients: IngredientWithCategory[],
   ): number {
     return ingredients.reduce((acc, cur) => acc + cur.carbonFootprint, 0);
+  }
+
+  private async validateUserId(userId: string): Promise<void> {
+    const isExist = await this.recipeRepository.isUserExist(userId);
+    if (!isExist) {
+      throw new NotFoundException('존재하지 않는 User입니다.');
+    }
   }
 }

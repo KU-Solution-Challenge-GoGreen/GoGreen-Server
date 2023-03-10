@@ -264,4 +264,15 @@ export class RecipeRepository {
       },
     });
   }
+
+  async isUserExist(userId: string): Promise<boolean> {
+    return this.prisma.user
+      .count({
+        where: {
+          id: userId,
+          deletedAt: null,
+        },
+      })
+      .then((count) => count > 0);
+  }
 }
