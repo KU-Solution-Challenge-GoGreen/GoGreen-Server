@@ -55,11 +55,28 @@ export class MealService {
     return MealSummaryListDto.of(meals);
   }
 
+  async getMealList(userId: string, date: Date): Promise<MealSummaryListDto> {
+    await this.validateUserId(userId);
+    const meals: MealSummary[] = await this.mealRepository.getMealListByDate(
+      userId,
+      date,
+    );
+
+    return MealSummaryListDto.of(meals);
+  }
+
   private async validateRecipeId(recipeId: string): Promise<void> {
     const isExist = await this.mealRepository.isRecipeExist(recipeId);
 
     if (!isExist) {
       throw new NotFoundException('존재하지 않는 레시피입니다.');
+    }
+  }
+
+  private async validateUserId(userId: string): Promise<void> {
+    const isExist = await this.mealRepository.isUserExist(userId);
+    if (!isExist) {
+      throw new NotFoundException('존재하지 않는 User입니다.');
     }
   }
 }

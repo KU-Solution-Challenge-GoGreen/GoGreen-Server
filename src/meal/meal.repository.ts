@@ -204,6 +204,60 @@ export class MealRepository {
     );
   }
 
+  async getMealListByDate(userId: string, date: Date): Promise<MealSummary[]> {
+    const meals = await this.prisma.meal.findMany({
+      where: {
+        userId: userId,
+        time: {
+          gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+          lt: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        userId: true,
+        description: true,
+        time: true,
+        photo: true,
+        Recipe: {
+          select: {
+            id: true,
+            name: true,
+            carbonFootprint: true,
+            RecipeIngredient: {
+              select: {
+                Ingredient: {
+                  select: {
+                    categoryId: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return meals.map((meal) => ({
+      id: meal.id,
+      title: meal.title,
+      userId: meal.userId,
+      description: meal.description,
+      time: meal.time,
+      photo: meal.photo,
+      recipe: {
+        name: meal.Recipe.name,
+        carbonFootprint: meal.Recipe.carbonFootprint,
+      },
+      // 재료 카테고리만 가져와서 중복 제거
+      categories: _.uniqBy(
+        meal.Recipe.RecipeIngredient,
+        'Ingredient.categoryId',
+      ).map((ingredient) => ingredient.Ingredient.categoryId),
+    }));
+  }
+
   async isRecipeExist(mealId: string): Promise<boolean> {
     const recipe = await this.prisma.recipe.findFirst({
       where: {
@@ -213,5 +267,16 @@ export class MealRepository {
     });
 
     return !!recipe;
+  }
+
+  async isUserExist(userId: string): Promise<boolean> {
+    return this.prisma.user
+      .count({
+        where: {
+          id: userId,
+          deletedAt: null,
+        },
+      })
+      .then((count) => count > 0);
   }
 }
