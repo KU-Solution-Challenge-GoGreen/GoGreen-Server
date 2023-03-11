@@ -6,6 +6,10 @@ import { RecipeCreateInput } from './type/recipe-create-input.type';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { RecipeBookmarkDto } from './dto/recipe-bookmark.dto';
 import { RecipeDto } from './dto/recipe.dto';
+import {
+  RecipeSummaryDto,
+  RecipeSummaryListDto,
+} from './dto/recipe-summary.dto';
 
 @Injectable()
 export class RecipeService {
@@ -70,9 +74,37 @@ export class RecipeService {
     return RecipeDto.of(recipe);
   }
 
+  async getRecipeSummaryByUserId(
+    userId: string,
+  ): Promise<RecipeSummaryListDto> {
+    await this.validateUserId(userId);
+    const recipes = await this.recipeRepository.getRecipeSummaryByUserId(
+      userId,
+    );
+
+    return RecipeSummaryListDto.of(recipes);
+  }
+
+  async getBookmarkedRecipeSummary(
+    userId: string,
+  ): Promise<RecipeSummaryListDto> {
+    const recipes = await this.recipeRepository.getBookmarkedRecipeSummary(
+      userId,
+    );
+
+    return RecipeSummaryListDto.of(recipes);
+  }
+
   private calculateCarbonFootprint(
     ingredients: IngredientWithCategory[],
   ): number {
     return ingredients.reduce((acc, cur) => acc + cur.carbonFootprint, 0);
+  }
+
+  private async validateUserId(userId: string): Promise<void> {
+    const isExist = await this.recipeRepository.isUserExist(userId);
+    if (!isExist) {
+      throw new NotFoundException('존재하지 않는 User입니다.');
+    }
   }
 }

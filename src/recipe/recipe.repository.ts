@@ -4,6 +4,7 @@ import { IngredientWithCategory } from '../ingredient/type/ingredient-with-categ
 import { RecipeCreateInput } from './type/recipe-create-input.type';
 import { RecipeData } from './type/recipe-data.type';
 import { RecipeDetail } from './type/recipe-detail.type';
+import { RecipeSummary } from './type/recipe-summary.type';
 
 @Injectable()
 export class RecipeRepository {
@@ -109,6 +110,7 @@ export class RecipeRepository {
     const recipe = await this.prisma.recipe.findFirst({
       where: {
         id,
+
         deletedAt: null,
       },
       select: {
@@ -186,6 +188,62 @@ export class RecipeRepository {
     );
   }
 
+  async getRecipeSummaryByUserId(userId: string): Promise<RecipeSummary[]> {
+    const recipes = await this.prisma.recipe.findMany({
+      where: {
+        userId,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        name: true,
+        Meal: {
+          select: {
+            photo: true,
+          },
+        },
+      },
+    });
+
+    return recipes.map((recipe) => ({
+      id: recipe.id,
+      name: recipe.name,
+      photos: recipe.Meal.map((meal) => meal.photo).filter(
+        (photo) => photo !== null,
+      ) as string[],
+    }));
+  }
+
+  async getBookmarkedRecipeSummary(userId: string): Promise<RecipeSummary[]> {
+    const recipes = await this.prisma.recipe.findMany({
+      where: {
+        deletedAt: null,
+        RecipeBookmark: {
+          some: {
+            userId,
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        Meal: {
+          select: {
+            photo: true,
+          },
+        },
+      },
+    });
+
+    return recipes.map((recipe) => ({
+      id: recipe.id,
+      name: recipe.name,
+      photos: recipe.Meal.map((meal) => meal.photo).filter(
+        (photo) => photo !== null,
+      ) as string[],
+    }));
+  }
+
   async getIngredientsByIds(ids: string[]): Promise<IngredientWithCategory[]> {
     return this.prisma.ingredient.findMany({
       where: {
@@ -205,5 +263,16 @@ export class RecipeRepository {
         },
       },
     });
+  }
+
+  async isUserExist(userId: string): Promise<boolean> {
+    return this.prisma.user
+      .count({
+        where: {
+          id: userId,
+          deletedAt: null,
+        },
+      })
+      .then((count) => count > 0);
   }
 }

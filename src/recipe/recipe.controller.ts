@@ -14,6 +14,7 @@ import { CreateRecipePayload } from './payload/create-recipe.payload';
 import { FirebaseAuthGuard } from '../auth/guard/auth.guard';
 import { RecipeBookmarkDto } from './dto/recipe-bookmark.dto';
 import { RecipeDto } from './dto/recipe.dto';
+import { RecipeSummaryListDto } from './dto/recipe-summary.dto';
 
 @Controller('recipes')
 @ApiTags('Recipe API')
@@ -53,5 +54,27 @@ export class RecipeController {
     @Param('recipeId') recipeId: string,
   ): Promise<RecipeDto> {
     return this.recipeService.getRecipeById(recipeId, user.id);
+  }
+
+  @Get('users/:userId')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '유저의 레시피 목록 조회' })
+  @ApiOkResponse({ type: [RecipeSummaryListDto] })
+  async getRecipeSummaryByUserId(
+    @Param('userId') userId: string,
+  ): Promise<RecipeSummaryListDto> {
+    return this.recipeService.getRecipeSummaryByUserId(userId);
+  }
+
+  @Get('bookmark')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '북마크한 레시피 목록 조회' })
+  @ApiOkResponse({ type: [RecipeSummaryListDto] })
+  async getBookmarkedRecipeSummary(
+    @CurrentUser() user: UserData,
+  ): Promise<RecipeSummaryListDto> {
+    return this.recipeService.getBookmarkedRecipeSummary(user.id);
   }
 }
