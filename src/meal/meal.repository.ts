@@ -6,6 +6,7 @@ import { MealData } from './type/meal.type';
 @Injectable()
 export class MealRepository {
   constructor(private readonly prisma: PrismaService) {}
+
   async createMeal(data: MealCreateInput): Promise<MealData> {
     const meal = await this.prisma.meal.create({
       data: {
@@ -27,6 +28,7 @@ export class MealRepository {
           select: {
             id: true,
             name: true,
+            carbonFootprint: true,
             Meal: {
               where: {
                 userId: data.userId,
@@ -47,6 +49,7 @@ export class MealRepository {
       description: meal.description,
       time: meal.time,
       photo: meal.photo,
+      carbonFootprint: meal.Recipe.carbonFootprint,
       recipe: {
         id: meal.Recipe.id,
         name: meal.Recipe.name,
@@ -57,13 +60,53 @@ export class MealRepository {
     };
   }
 
-  async isMealExist(mealId: string): Promise<boolean> {
+  async getMealById(mealId: string, userId: string): Promise<MealData | null> {
     const meal = await this.prisma.meal.findUnique({
       where: {
         id: mealId,
       },
+      select: {
+        id: true,
+        title: true,
+        userId: true,
+        description: true,
+        time: true,
+        photo: true,
+        Recipe: {
+          select: {
+            id: true,
+            name: true,
+            carbonFootprint: true,
+            Meal: {
+              where: {
+                userId: userId,
+              },
+              select: {
+                photo: true,
+              },
+            },
+          },
+        },
+      },
     });
 
-    return !!meal;
+    if (!meal) return null;
+
+    return {
+      id: meal.id,
+      title: meal.title,
+      userId: meal.userId,
+      description: meal.description,
+      time: meal.time,
+      photo: meal.photo,
+      carbonFootprint: meal.Recipe.carbonFootprint,
+      recipe: {
+        id: meal.Recipe.id,
+        name: meal.Recipe.name,
+        photos: meal.Recipe.Meal.map((m) => m.photo).filter(
+          (photo) => photo !== null,
+        ) as string[],
+      },
+    };
   }
 }

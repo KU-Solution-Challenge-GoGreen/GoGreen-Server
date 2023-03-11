@@ -12,8 +12,6 @@ export class MealService {
     userId: string,
     payload: CreateMealPayload,
   ): Promise<MealDto> {
-    await this.validateRecipeId(payload.recipeId);
-
     const input: MealCreateInput = {
       userId,
       title: payload.title,
@@ -23,15 +21,15 @@ export class MealService {
       recipeId: payload.recipeId,
     };
 
-    const meal = await this.mealRepository.createMeal(input);
-    return MealDto.of(meal);
+    const meal = this.mealRepository.createMeal(input);
+    return meal;
   }
+  async getMealById(userId: string, mealId: string): Promise<MealDto> {
+    const meal = await this.mealRepository.getMealById(mealId, userId);
 
-  private async validateRecipeId(recipeId: string): Promise<void> {
-    const isExist = await this.mealRepository.isMealExist(recipeId);
-
-    if (!isExist) {
-      throw new NotFoundException('존재하지 않는 레시피입니다.');
+    if (!meal) {
+      throw new NotFoundException('존재하지 않는 식단ID입니다.');
     }
+    return MealDto.of(meal);
   }
 }

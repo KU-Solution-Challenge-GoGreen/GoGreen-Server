@@ -38,6 +38,12 @@ export class MealDto {
 
   @ApiProperty({
     type: String,
+    description: '레시피 탄소발자국',
+  })
+  carbonFootprint!: number;
+
+  @ApiProperty({
+    type: String,
     description: '식단 사진',
   })
   photo!: string | null;
@@ -49,7 +55,25 @@ export class MealDto {
   time!: Date;
 
   static of(meal: MealData): MealDto {
-    const { id, title, userId, description, recipe, time, photo } = meal;
-    return { id, title, userId, description, recipe, photo, time };
+    const {
+      id,
+      title,
+      userId,
+      description,
+      recipe,
+      time,
+      photo,
+      carbonFootprint,
+    } = meal;
+    return {
+      id,
+      title,
+      userId,
+      description,
+      recipe,
+      photo,
+      time,
+      carbonFootprint,
+    };
   }
 }

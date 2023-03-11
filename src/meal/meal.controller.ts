@@ -1,8 +1,9 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { MealService } from './meal.service';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -27,5 +28,17 @@ export class MealController {
     @Body() payload: CreateMealPayload,
   ): Promise<MealDto> {
     return this.mealService.createMeal(user.id, payload);
+  }
+
+  @Get(':mealId')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '식단 ID로 조회' })
+  @ApiOkResponse({ type: MealDto })
+  async getRecipeById(
+    @CurrentUser() user: UserData,
+    @Param('mealId') mealId: string,
+  ): Promise<MealDto> {
+    return this.mealService.getMealById(user.id, mealId);
   }
 }
