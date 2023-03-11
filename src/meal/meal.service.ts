@@ -3,6 +3,8 @@ import { MealDto } from './dto/meal.dto';
 import { MealRepository } from './meal.repository';
 import { CreateMealPayload } from './payload/create-meal.payload';
 import { MealCreateInput } from './type/create-meal-input.type';
+import { MealSummaryListDto } from './dto/meal-summary.dto';
+import { MealSummary } from './type/meal-summary.type';
 
 @Injectable()
 export class MealService {
@@ -12,6 +14,8 @@ export class MealService {
     userId: string,
     payload: CreateMealPayload,
   ): Promise<MealDto> {
+    await this.validateRecipeId(payload.recipeId);
+
     const input: MealCreateInput = {
       userId,
       title: payload.title,
@@ -21,8 +25,7 @@ export class MealService {
       recipeId: payload.recipeId,
     };
 
-    const meal = this.mealRepository.createMeal(input);
-    return meal;
+    return this.mealRepository.createMeal(input);
   }
   async getMealById(userId: string, mealId: string): Promise<MealDto> {
     const meal = await this.mealRepository.getMealById(mealId, userId);
@@ -31,5 +34,32 @@ export class MealService {
       throw new NotFoundException('존재하지 않는 식단ID입니다.');
     }
     return MealDto.of(meal);
+  }
+
+  async searchMeal(
+    userId: string,
+    typeId?: string,
+  ): Promise<MealSummaryListDto> {
+    const possibleIngredientIds =
+      await this.mealRepository.getPossibleIngredientIds(typeId);
+
+    if (possibleIngredientIds.length === 0) {
+      throw new NotFoundException('잘못된 vegan type입니다.');
+    }
+
+    const meals: MealSummary[] = await this.mealRepository.searchMeal(
+      userId,
+      possibleIngredientIds,
+    );
+
+    return MealSummaryListDto.of(meals);
+  }
+
+  private async validateRecipeId(recipeId: string): Promise<void> {
+    const isExist = await this.mealRepository.isRecipeExist(recipeId);
+
+    if (!isExist) {
+      throw new NotFoundException('존재하지 않는 레시피입니다.');
+    }
   }
 }
