@@ -6,7 +6,6 @@ import { MealData } from './type/meal.type';
 @Injectable()
 export class MealRepository {
   constructor(private readonly prisma: PrismaService) {}
-
   async createMeal(data: MealCreateInput): Promise<MealData> {
     const meal = await this.prisma.meal.create({
       data: {
@@ -56,5 +55,15 @@ export class MealRepository {
         ) as string[],
       },
     };
+  }
+
+  async isMealExist(mealId: string): Promise<boolean> {
+    const meal = await this.prisma.meal.findUnique({
+      where: {
+        id: mealId,
+      },
+    });
+
+    return !!meal;
   }
 }

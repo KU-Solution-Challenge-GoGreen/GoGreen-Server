@@ -11,7 +11,6 @@ import { FirebaseAuthGuard } from 'src/auth/guard/auth.guard';
 import { CurrentUser } from 'src/auth/decorator/user.decorator';
 import { UserData } from 'src/auth/type/user-data.type';
 import { CreateMealPayload } from './payload/create-meal.payload';
-import { CreateRecipeDto } from 'src/recipe/dto/create-recipe.dto';
 
 @Controller('meals')
 @ApiTags('Meal API')
