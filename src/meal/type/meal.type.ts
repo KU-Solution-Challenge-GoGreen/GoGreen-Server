@@ -6,6 +6,7 @@ export type MealData = {
   userId: string;
   description: string | null;
   photo: string | null;
+  carbonFootprint: number;
   time: Date;
   recipe: RecipeSummary;
 };
