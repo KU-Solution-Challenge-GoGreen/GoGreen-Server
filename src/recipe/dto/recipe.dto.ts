@@ -1,12 +1,11 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IngredientDto } from '../../ingredient/dto/category-with-ingredient-list.dto';
 import { IngredientCategoryDto } from '../../ingredient/dto/ingredient-with-category.dto';
 import { RecipeStepDto } from './recipe-step.dto';
-import { ApiProperty } from '@nestjs/swagger';
-import { RecipeData } from '../type/recipe-data.type';
-import { IngredientWithCategory } from '../../ingredient/type/ingredient-with-category.type';
+import { RecipeDetail } from '../type/recipe-detail.type';
 import * as _ from 'lodash';
 
-export class CreateRecipeDto {
+export class RecipeDto {
   @ApiProperty({
     type: String,
     description: '레시피 ID',
@@ -54,32 +53,32 @@ export class CreateRecipeDto {
     description: '레시피 단계',
   })
   steps!: RecipeStepDto[];
+  @ApiProperty({
+    type: [String],
+    description: '썸네일 사진 List',
+  })
+  photos!: string[];
 
-  static of(
-    recipe: RecipeData,
-    ingredients: IngredientWithCategory[],
-  ): CreateRecipeDto {
+  @ApiProperty({
+    type: Boolean,
+    description: '북마크 여부',
+  })
+  isBookmarked!: boolean;
+
+  static of(recipe: RecipeDetail): RecipeDto {
     return {
       id: recipe.id,
       userId: recipe.userId,
       name: recipe.name,
       carbonFootprint: recipe.carbonFootprint,
       duration: recipe.duration,
-      ingredients: ingredients.map((ingredient) => ({
-        id: ingredient.id,
-        name: ingredient.name,
-        carbonFootprint: ingredient.carbonFootprint,
-      })),
-      //ingredient 안의 IngredientCategory.id를 뽑아서 중복을 제거
-      categories: _.uniqBy(ingredients, 'IngredientCategory.id').map(
+      ingredients: recipe.ingredients,
+      categories: _.uniqBy(recipe.ingredients, 'IngredientCategory.id').map(
         (ingredient) => ingredient.IngredientCategory,
       ),
-      steps: recipe.steps.map((step) => ({
-        id: step.id,
-        index: step.index,
-        description: step.description,
-        photo: step.photo,
-      })),
+      steps: recipe.steps,
+      photos: recipe.photos,
+      isBookmarked: recipe.isBookmarked,
     };
   }
 }
