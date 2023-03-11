@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import {
   ApiBearerAuth,
@@ -11,6 +11,7 @@ import { CurrentUser } from '../auth/decorator/user.decorator';
 import { UserData } from '../auth/type/user-data.type';
 import { CreateRecipePayload } from './payload/create-recipe.payload';
 import { FirebaseAuthGuard } from '../auth/guard/auth.guard';
+import { RecipeBookmarkDto } from './dto/recipe-bookmark.dto';
 
 @Controller('recipes')
 @ApiTags('Recipe API')
@@ -27,5 +28,17 @@ export class RecipeController {
     @Body() payload: CreateRecipePayload,
   ): Promise<CreateRecipeDto> {
     return this.recipeService.createRecipe(user.id, payload);
+  }
+
+  @Post(':recipeId/bookmark')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '레시피 북마크 상태를 토글합니다.' })
+  @ApiCreatedResponse({ type: RecipeBookmarkDto })
+  async toggleRecipeBookmark(
+    @CurrentUser() user: UserData,
+    @Param('recipeId') recipeId: string,
+  ): Promise<RecipeBookmarkDto> {
+    return this.recipeService.toggleRecipeBookmark(user.id, recipeId);
   }
 }

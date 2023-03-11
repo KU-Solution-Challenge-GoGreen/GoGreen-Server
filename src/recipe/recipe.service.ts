@@ -4,6 +4,7 @@ import { CreateRecipePayload } from './payload/create-recipe.payload';
 import { IngredientWithCategory } from '../ingredient/type/ingredient-with-category.type';
 import { RecipeCreateInput } from './type/recipe-create-input.type';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
+import { RecipeBookmarkDto } from './dto/recipe-bookmark.dto';
 
 @Injectable()
 export class RecipeService {
@@ -38,6 +39,24 @@ export class RecipeService {
     const recipe = await this.recipeRepository.createRecipe(data);
 
     return CreateRecipeDto.of(recipe, ingredients);
+  }
+
+  async toggleRecipeBookmark(
+    userId: string,
+    recipeId: string,
+  ): Promise<RecipeBookmarkDto> {
+    const isExist = await this.recipeRepository.isRecipeExist(recipeId);
+
+    if (!isExist) {
+      throw new NotFoundException('존재하지 않는 레시피입니다.');
+    }
+
+    const result = await this.recipeRepository.toggleRecipeBookmark(
+      userId,
+      recipeId,
+    );
+
+    return RecipeBookmarkDto.of(result);
   }
 
   private calculateCarbonFootprint(

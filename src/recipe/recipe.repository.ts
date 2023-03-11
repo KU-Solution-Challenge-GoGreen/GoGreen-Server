@@ -60,6 +60,50 @@ export class RecipeRepository {
     };
   }
 
+  async isRecipeExist(recipeId: string): Promise<boolean> {
+    return (
+      (await this.prisma.recipe.count({
+        where: {
+          id: recipeId,
+          deletedAt: null,
+        },
+      })) > 0
+    );
+  }
+
+  async toggleRecipeBookmark(
+    userId: string,
+    recipeId: string,
+  ): Promise<boolean> {
+    //bookmark되어있으면 삭제, 아니면 생성
+    const bookmark = await this.prisma.recipeBookmark.findFirst({
+      where: {
+        userId,
+        recipeId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (bookmark) {
+      await this.prisma.recipeBookmark.delete({
+        where: {
+          id: bookmark.id,
+        },
+      });
+    } else {
+      await this.prisma.recipeBookmark.create({
+        data: {
+          userId,
+          recipeId,
+        },
+      });
+    }
+
+    return !bookmark;
+  }
+
   async getIngredientsByIds(ids: string[]): Promise<IngredientWithCategory[]> {
     return this.prisma.ingredient.findMany({
       where: {
