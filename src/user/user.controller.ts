@@ -24,7 +24,7 @@ export class UserController {
   @ApiCreatedResponse({ type: UserDto })
   async updateUser(
     @CurrentUser() user: UserData,
-    @Body('recipeId') payload: UserPayload,
+    @Body() payload: UserPayload,
   ): Promise<UserDto> {
     return this.userService.updateUser(user.id, payload);
   }
