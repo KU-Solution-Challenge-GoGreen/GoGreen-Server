@@ -2,24 +2,29 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
   Param,
   Post,
   Req,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
   ApiBearerAuth,
+  ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CheckDuplicateDto } from './dto/check-duplicate.dto';
 import { RequestWithAuth } from './type/request-with.auth.type';
 import { FirebaseService } from './firebase/firebase.service';
 import { UserInfoDto } from './dto/user-info.dto';
 import { RegisterPayload } from './payload/register.payload';
+import { FirebaseAuthGuard } from './guard/auth.guard';
+import { CurrentUser } from './decorator/user.decorator';
+import { UserData } from './type/user-data.type';
 
 @Controller('auth')
 @ApiTags('Auth API')
@@ -51,6 +56,16 @@ export class AuthController {
     return UserInfoDto.of(
       await this.authService.register(createUserPayload, userId),
     );
+  }
+
+  @Post('login')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '로그인합니다.' })
+  @ApiCreatedResponse({ type: UserInfoDto })
+  @ApiUnauthorizedResponse({ description: '인증되지 않은 사용자입니다.' })
+  async login(@CurrentUser() user: UserData): Promise<UserInfoDto> {
+    return UserInfoDto.of(user);
   }
 
   @Get('name/:name/duplicate')
