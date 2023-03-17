@@ -21,6 +21,17 @@ export class UserRepository {
     });
     if (!userValid) return null;
 
+    const nameValid = await this.prisma.user.findFirst({
+      where: {
+        name: data.name,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+      },
+    });
+    if (nameValid) return null;
+
     const user = await this.prisma.user.update({
       where: {
         id: userId,
