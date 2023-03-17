@@ -1,4 +1,4 @@
-import { Body, Controller, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Param, Put, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -23,9 +23,9 @@ export class UserController {
   @ApiOperation({ summary: '사용자 정보를 수정합니다.' })
   @ApiCreatedResponse({ type: UserDto })
   async updateUser(
-    @CurrentUser() user: UserData,
+    @Param('userId') userId: string,
     @Body() payload: UserPayload,
   ): Promise<UserDto> {
-    return this.userService.updateUser(user.id, payload);
+    return this.userService.updateUser(userId, payload);
   }
 }

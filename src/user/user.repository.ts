@@ -11,6 +11,16 @@ export class UserRepository {
     userId: string,
     data: UserPayload,
   ): Promise<UserData | null> {
+    const userValid = await this.prisma.meal.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+      },
+    });
+    if (!userValid) return null;
+
     const user = await this.prisma.user.update({
       where: {
         id: userId,
@@ -20,6 +30,12 @@ export class UserRepository {
         photo: data.photo,
       },
     });
-    return user;
+
+    const resData: UserData = {
+      id: user.id,
+      name: user.name,
+      photo: user.photo,
+    };
+    return resData;
   }
 }
