@@ -33,8 +33,9 @@ export class MealPayload {
   @ApiPropertyOptional({
     type: String,
     description: '식단 사진',
+    nullable: true,
   })
-  photo?: string;
+  photo?: string | null;
 
   @IsDefined()
   @IsDate()

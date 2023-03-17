@@ -286,4 +286,17 @@ export class MealRepository {
       })
       .then((count) => count > 0);
   }
+
+  async getAuthorId(mealId: string): Promise<string> {
+    const meal = await this.prisma.meal.findUnique({
+      where: {
+        id: mealId,
+      },
+      select: {
+        userId: true,
+      },
+    });
+
+    return meal!.userId;
+  }
 }
