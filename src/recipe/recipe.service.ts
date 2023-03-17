@@ -6,10 +6,7 @@ import { RecipeCreateInput } from './type/recipe-create-input.type';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { RecipeBookmarkDto } from './dto/recipe-bookmark.dto';
 import { RecipeDto } from './dto/recipe.dto';
-import {
-  RecipeSummaryDto,
-  RecipeSummaryListDto,
-} from './dto/recipe-summary.dto';
+import { RecipeSummaryListDto } from './dto/recipe-summary.dto';
 
 @Injectable()
 export class RecipeService {

@@ -44,17 +44,6 @@ export class RecipeController {
   ): Promise<RecipeBookmarkDto> {
     return this.recipeService.toggleRecipeBookmark(user.id, recipeId);
   }
-  @Get(':recipeId')
-  @UseGuards(FirebaseAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: '레시피 ID로 조회' })
-  @ApiOkResponse({ type: RecipeDto })
-  async getRecipeById(
-    @CurrentUser() user: UserData,
-    @Param('recipeId') recipeId: string,
-  ): Promise<RecipeDto> {
-    return this.recipeService.getRecipeById(recipeId, user.id);
-  }
 
   @Get('users/:userId')
   @UseGuards(FirebaseAuthGuard)
@@ -76,5 +65,17 @@ export class RecipeController {
     @CurrentUser() user: UserData,
   ): Promise<RecipeSummaryListDto> {
     return this.recipeService.getBookmarkedRecipeSummary(user.id);
+  }
+
+  @Get(':recipeId')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '레시피 ID로 조회' })
+  @ApiOkResponse({ type: RecipeDto })
+  async getRecipeById(
+    @CurrentUser() user: UserData,
+    @Param('recipeId') recipeId: string,
+  ): Promise<RecipeDto> {
+    return this.recipeService.getRecipeById(recipeId, user.id);
   }
 }

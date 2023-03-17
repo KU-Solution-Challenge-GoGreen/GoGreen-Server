@@ -28,7 +28,7 @@ export class MealService {
     return this.mealRepository.createMeal(input);
   }
   async getMealById(userId: string, mealId: string): Promise<MealDto> {
-    const meal = await this.mealRepository.getMealById(mealId, userId);
+    const meal = await this.mealRepository.getMealById(mealId);
 
     if (!meal) {
       throw new NotFoundException('존재하지 않는 식단ID입니다.');
