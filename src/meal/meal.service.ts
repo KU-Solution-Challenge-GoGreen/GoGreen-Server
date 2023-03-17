@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { MealDto } from './dto/meal.dto';
 import { MealRepository } from './meal.repository';
-import { CreateMealPayload } from './payload/create-meal.payload';
+import { MealPayload } from './payload/meal.payload';
 import { MealCreateInput } from './type/create-meal-input.type';
 import { MealSummaryListDto } from './dto/meal-summary.dto';
 import { MealSummary } from './type/meal-summary.type';
@@ -10,10 +10,7 @@ import { MealSummary } from './type/meal-summary.type';
 export class MealService {
   constructor(private readonly mealRepository: MealRepository) {}
 
-  async createMeal(
-    userId: string,
-    payload: CreateMealPayload,
-  ): Promise<MealDto> {
+  async createMeal(userId: string, payload: MealPayload): Promise<MealDto> {
     await this.validateRecipeId(payload.recipeId);
 
     const input: MealCreateInput = {
