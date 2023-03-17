@@ -4,5 +4,5 @@ export type MealCreateInput = {
   recipeId: string;
   description: string | null;
   photo: string | null;
-  time: Date;
+  date: Date;
 };

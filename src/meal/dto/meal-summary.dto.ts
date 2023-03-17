@@ -48,9 +48,9 @@ export class MealSummaryDto {
 
   @ApiProperty({
     type: Date,
-    description: '식단 작성 시간',
+    description: '식단 날짜',
   })
-  time!: Date;
+  date!: Date;
 
   @ApiProperty({
     type: Number,
@@ -76,7 +76,7 @@ export class MealSummaryListDto {
         recipeName: meal.recipe.name,
         categoryIds: meal.categories,
         photo: meal.photo,
-        time: meal.time,
+        date: meal.date,
         carbonFootprint: meal.recipe.carbonFootprint,
       })),
     };

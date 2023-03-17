@@ -9,5 +9,5 @@ export type MealSummary = {
   };
   categories: string[];
   photo: string | null;
-  time: Date;
+  date: Date;
 };
