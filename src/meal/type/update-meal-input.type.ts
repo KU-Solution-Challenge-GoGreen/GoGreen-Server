@@ -1,6 +1,5 @@
-export type CreateMealInput = {
+export type UpdateMealInput = {
   title: string;
-  userId: string;
   recipeId: string;
   description: string | null;
   photo: string | null;

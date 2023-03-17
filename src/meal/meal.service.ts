@@ -6,10 +6,11 @@ import {
 import { MealDto } from './dto/meal.dto';
 import { MealRepository } from './meal.repository';
 import { MealPayload } from './payload/meal.payload';
-import { MealCreateInput } from './type/create-meal-input.type';
+import { CreateMealInput } from './type/create-meal-input.type';
 import { MealSummaryListDto } from './dto/meal-summary.dto';
 import { MealSummary } from './type/meal-summary.type';
 import { MealData } from './type/meal.type';
+import { UpdateMealInput } from './type/update-meal-input.type';
 
 @Injectable()
 export class MealService {
@@ -18,7 +19,7 @@ export class MealService {
   async createMeal(userId: string, payload: MealPayload): Promise<MealDto> {
     await this.validateRecipeId(payload.recipeId);
 
-    const input: MealCreateInput = {
+    const input: CreateMealInput = {
       userId,
       title: payload.title,
       description: payload.description ?? null,
@@ -77,7 +78,17 @@ export class MealService {
       this.validateMeal(mealId, userId),
     ]);
 
-    return {} as any;
+    const input: UpdateMealInput = {
+      title: payload.title,
+      description: payload.description ?? null,
+      photo: payload.photo ?? null,
+      date: payload.date,
+      recipeId: payload.recipeId,
+    };
+
+    const updatedMeal = await this.mealRepository.updateMeal(mealId, input);
+
+    return MealDto.of(updatedMeal);
   }
 
   private async validateRecipeId(recipeId: string): Promise<void> {
