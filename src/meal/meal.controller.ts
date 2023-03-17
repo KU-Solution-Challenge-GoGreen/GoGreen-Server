@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
@@ -12,6 +14,7 @@ import { MealService } from './meal.service';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -89,5 +92,18 @@ export class MealController {
     @Body() payload: MealPayload,
   ): Promise<MealDto> {
     return this.mealService.updateMeal(user.id, mealId, payload);
+  }
+
+  @Delete(':mealId')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '식단 삭제하기' })
+  @ApiNoContentResponse()
+  @HttpCode(204)
+  async deleteMeal(
+    @CurrentUser() user: UserData,
+    @Param('mealId') mealId: string,
+  ): Promise<void> {
+    return this.mealService.deleteMeal(user.id, mealId);
   }
 }

@@ -91,6 +91,11 @@ export class MealService {
     return MealDto.of(updatedMeal);
   }
 
+  async deleteMeal(userId: string, mealId: string): Promise<void> {
+    await this.validateMeal(mealId, userId);
+    await this.mealRepository.deleteMeal(mealId);
+  }
+
   private async validateRecipeId(recipeId: string): Promise<void> {
     const isExist = await this.mealRepository.isRecipeExist(recipeId);
 
