@@ -82,7 +82,7 @@ export class MealController {
   @UseGuards(FirebaseAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: '식단 수정하기' })
-  @ApiOkResponse({ type: MealDto })
+  @ApiCreatedResponse({ type: MealDto })
   async updateMeal(
     @CurrentUser() user: UserData,
     @Param('mealId') mealId: string,
