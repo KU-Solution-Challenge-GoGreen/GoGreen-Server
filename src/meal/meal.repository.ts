@@ -62,7 +62,7 @@ export class MealRepository {
     };
   }
 
-  async getMealById(mealId: string, userId: string): Promise<MealData | null> {
+  async getMealById(mealId: string): Promise<MealData | null> {
     const meal = await this.prisma.meal.findUnique({
       where: {
         id: mealId,
@@ -77,22 +77,32 @@ export class MealRepository {
         Recipe: {
           select: {
             id: true,
-            name: true,
-            carbonFootprint: true,
-            Meal: {
-              where: {
-                userId: userId,
-              },
-              select: {
-                photo: true,
-              },
-            },
+            userId: true,
           },
         },
       },
     });
 
     if (!meal) return null;
+
+    const recipe = await this.prisma.recipe.findUnique({
+      where: {
+        id: meal.Recipe.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        carbonFootprint: true,
+        Meal: {
+          where: {
+            userId: meal.Recipe.userId,
+          },
+          select: {
+            photo: true,
+          },
+        },
+      },
+    });
 
     return {
       id: meal.id,
@@ -101,11 +111,11 @@ export class MealRepository {
       description: meal.description,
       date: meal.date,
       photo: meal.photo,
-      carbonFootprint: meal.Recipe.carbonFootprint,
+      carbonFootprint: recipe!.carbonFootprint,
       recipe: {
-        id: meal.Recipe.id,
-        name: meal.Recipe.name,
-        photos: meal.Recipe.Meal.map((m) => m.photo).filter(
+        id: recipe!.id,
+        name: recipe!.name,
+        photos: recipe!.Meal.map((m) => m.photo).filter(
           (photo) => photo !== null,
         ) as string[],
       },

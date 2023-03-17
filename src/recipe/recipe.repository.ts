@@ -106,11 +106,13 @@ export class RecipeRepository {
     return !bookmark;
   }
 
-  async getRecipeById(id: string, userId): Promise<RecipeDetail | null> {
+  async getRecipeById(
+    id: string,
+    userId: string,
+  ): Promise<RecipeDetail | null> {
     const recipe = await this.prisma.recipe.findFirst({
       where: {
         id,
-
         deletedAt: null,
       },
       select: {
@@ -198,6 +200,9 @@ export class RecipeRepository {
         id: true,
         name: true,
         Meal: {
+          where: {
+            userId,
+          },
           select: {
             photo: true,
           },
@@ -215,6 +220,7 @@ export class RecipeRepository {
   }
 
   async getBookmarkedRecipeSummary(userId: string): Promise<RecipeSummary[]> {
+    // 북마크된 레시피를 먼저 조회
     const recipes = await this.prisma.recipe.findMany({
       where: {
         deletedAt: null,
@@ -227,20 +233,39 @@ export class RecipeRepository {
       select: {
         id: true,
         name: true,
-        Meal: {
-          select: {
-            photo: true,
-          },
-        },
+        userId: true,
       },
     });
+
+    // 해당 레시피들의 meal을 전부 다 조회
+    const meals = await this.prisma.meal.findMany({
+      where: {
+        recipeId: {
+          in: recipes.map((recipe) => recipe.id),
+        },
+      },
+      select: {
+        recipeId: true,
+        userId: true,
+        photo: true,
+      },
+    });
+
+    // recipe 저자의 meal만 남게 filtering
+    const filteredMeals = meals.filter(
+      (meal) =>
+        recipes.find((recipe) => recipe.id === meal.recipeId)!.userId ===
+        meal.userId,
+    );
 
     return recipes.map((recipe) => ({
       id: recipe.id,
       name: recipe.name,
-      photos: recipe.Meal.map((meal) => meal.photo).filter(
-        (photo) => photo !== null,
-      ) as string[],
+      // meal 중에서 recipeId가 일치하고, photo가 null이 아닌 경우만 배열에 담아서 photos에 넘겨줌
+      photos: filteredMeals
+        .filter((meal) => meal.recipeId === recipe.id)
+        .map((meal) => meal.photo)
+        .filter((photo) => photo !== null) as string[],
     }));
   }
 
