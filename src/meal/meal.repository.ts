@@ -82,6 +82,14 @@ export class MealRepository {
     return updatedMeal!;
   }
 
+  async deleteMeal(mealId: string): Promise<void> {
+    await this.prisma.meal.delete({
+      where: {
+        id: mealId,
+      },
+    });
+  }
+
   async getMealById(mealId: string): Promise<MealData | null> {
     const meal = await this.prisma.meal.findUnique({
       where: {
