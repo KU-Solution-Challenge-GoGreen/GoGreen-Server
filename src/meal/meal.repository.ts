@@ -17,14 +17,14 @@ export class MealRepository {
         recipeId: data.recipeId,
         description: data.description,
         photo: data.photo,
-        time: data.time,
+        date: data.date,
       },
       select: {
         id: true,
         title: true,
         userId: true,
         description: true,
-        time: true,
+        date: true,
         photo: true,
         Recipe: {
           select: {
@@ -49,7 +49,7 @@ export class MealRepository {
       title: meal.title,
       userId: meal.userId,
       description: meal.description,
-      time: meal.time,
+      date: meal.date,
       photo: meal.photo,
       carbonFootprint: meal.Recipe.carbonFootprint,
       recipe: {
@@ -72,7 +72,7 @@ export class MealRepository {
         title: true,
         userId: true,
         description: true,
-        time: true,
+        date: true,
         photo: true,
         Recipe: {
           select: {
@@ -99,7 +99,7 @@ export class MealRepository {
       title: meal.title,
       userId: meal.userId,
       description: meal.description,
-      time: meal.time,
+      date: meal.date,
       photo: meal.photo,
       carbonFootprint: meal.Recipe.carbonFootprint,
       recipe: {
@@ -136,7 +136,7 @@ export class MealRepository {
         title: true,
         userId: true,
         description: true,
-        time: true,
+        date: true,
         photo: true,
         Recipe: {
           select: {
@@ -162,7 +162,7 @@ export class MealRepository {
       title: meal.title,
       userId: meal.userId,
       description: meal.description,
-      time: meal.time,
+      date: meal.date,
       photo: meal.photo,
 
       recipe: {
@@ -208,17 +208,14 @@ export class MealRepository {
     const meals = await this.prisma.meal.findMany({
       where: {
         userId: userId,
-        time: {
-          gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-          lt: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
-        },
+        date,
       },
       select: {
         id: true,
         title: true,
         userId: true,
         description: true,
-        time: true,
+        date: true,
         photo: true,
         Recipe: {
           select: {
@@ -244,7 +241,7 @@ export class MealRepository {
       title: meal.title,
       userId: meal.userId,
       description: meal.description,
-      time: meal.time,
+      date: meal.date,
       photo: meal.photo,
       recipe: {
         name: meal.Recipe.name,

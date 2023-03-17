@@ -69,11 +69,12 @@ model Meal {
   title       String
   description String?
   photo       String?
-  time        DateTime
+  date        DateTime @db.Date
 
   User   User   @relation(fields: [userId], references: [id])
   Recipe Recipe @relation(fields: [recipeId], references: [id])
 
+  @@index([userId])
   @@map("meal")
 }
 

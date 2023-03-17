@@ -43,5 +43,5 @@ export class CreateMealPayload {
     type: Date,
     description: '식단 날짜',
   })
-  time!: Date;
+  date!: Date;
 }
