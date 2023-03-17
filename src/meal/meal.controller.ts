@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -75,5 +76,18 @@ export class MealController {
     @Query() query: DateQuery,
   ): Promise<MealSummaryListDto> {
     return this.mealService.getMealList(userId, query.date);
+  }
+
+  @Put(':mealId')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '식단 수정하기' })
+  @ApiOkResponse({ type: MealDto })
+  async updateMeal(
+    @CurrentUser() user: UserData,
+    @Param('mealId') mealId: string,
+    @Body() payload: MealPayload,
+  ): Promise<MealDto> {
+    return this.mealService.updateMeal(user.id, mealId, payload);
   }
 }

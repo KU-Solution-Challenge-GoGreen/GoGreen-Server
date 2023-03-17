@@ -1,10 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { MealDto } from './dto/meal.dto';
 import { MealRepository } from './meal.repository';
 import { MealPayload } from './payload/meal.payload';
 import { MealCreateInput } from './type/create-meal-input.type';
 import { MealSummaryListDto } from './dto/meal-summary.dto';
 import { MealSummary } from './type/meal-summary.type';
+import { MealData } from './type/meal.type';
 
 @Injectable()
 export class MealService {
@@ -62,6 +67,19 @@ export class MealService {
     return MealSummaryListDto.of(meals);
   }
 
+  async updateMeal(
+    userId: string,
+    mealId: string,
+    payload: MealPayload,
+  ): Promise<MealDto> {
+    await Promise.all([
+      this.validateRecipeId(payload.recipeId),
+      this.validateMeal(mealId, userId),
+    ]);
+
+    return {} as any;
+  }
+
   private async validateRecipeId(recipeId: string): Promise<void> {
     const isExist = await this.mealRepository.isRecipeExist(recipeId);
 
@@ -74,6 +92,20 @@ export class MealService {
     const isExist = await this.mealRepository.isUserExist(userId);
     if (!isExist) {
       throw new NotFoundException('존재하지 않는 User입니다.');
+    }
+  }
+
+  private async validateMeal(mealId: string, userId: string): Promise<void> {
+    const meal = await this.mealRepository.getMealById(mealId);
+    if (!meal) {
+      throw new NotFoundException('존재하지 않는 Meal입니다.');
+    }
+
+    this.checkIsAuthor(meal, userId);
+  }
+  private checkIsAuthor(meal: MealData, userId: string): void {
+    if (meal.userId !== userId) {
+      throw new ForbiddenException('Meal의 작성자가 아닙니다.');
     }
   }
 }
