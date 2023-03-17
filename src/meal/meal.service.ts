@@ -21,7 +21,7 @@ export class MealService {
       title: payload.title,
       description: payload.description ?? null,
       photo: payload.photo ?? null,
-      time: payload.time,
+      date: payload.date,
       recipeId: payload.recipeId,
     };
 
