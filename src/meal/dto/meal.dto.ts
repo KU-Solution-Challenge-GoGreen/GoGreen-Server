@@ -50,9 +50,9 @@ export class MealDto {
 
   @ApiProperty({
     type: Date,
-    description: '식단 시간',
+    description: '식단 날짜',
   })
-  time!: Date;
+  date!: Date;
 
   static of(meal: MealData): MealDto {
     const {
@@ -61,7 +61,7 @@ export class MealDto {
       userId,
       description,
       recipe,
-      time,
+      date,
       photo,
       carbonFootprint,
     } = meal;
@@ -72,7 +72,7 @@ export class MealDto {
       description,
       recipe,
       photo,
-      time,
+      date,
       carbonFootprint,
     };
   }
