@@ -2,7 +2,7 @@ import { IsDate, IsDefined, IsOptional, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 
-export class CreateMealPayload {
+export class MealPayload {
   @IsDefined()
   @IsString()
   @ApiProperty({

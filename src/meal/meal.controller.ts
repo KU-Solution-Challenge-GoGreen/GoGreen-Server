@@ -19,7 +19,7 @@ import { MealDto } from './dto/meal.dto';
 import { FirebaseAuthGuard } from 'src/auth/guard/auth.guard';
 import { CurrentUser } from 'src/auth/decorator/user.decorator';
 import { UserData } from 'src/auth/type/user-data.type';
-import { CreateMealPayload } from './payload/create-meal.payload';
+import { MealPayload } from './payload/meal.payload';
 import { MealSummaryListDto } from './dto/meal-summary.dto';
 import { SearchMealQuery } from './query/search-meal.query';
 import { DateQuery } from '../common/query/date.query';
@@ -36,7 +36,7 @@ export class MealController {
   @ApiCreatedResponse({ type: MealDto })
   async createMeal(
     @CurrentUser() user: UserData,
-    @Body() payload: CreateMealPayload,
+    @Body() payload: MealPayload,
   ): Promise<MealDto> {
     return this.mealService.createMeal(user.id, payload);
   }
