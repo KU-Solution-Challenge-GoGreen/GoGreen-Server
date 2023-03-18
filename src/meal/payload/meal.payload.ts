@@ -2,7 +2,7 @@ import { IsDate, IsDefined, IsOptional, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 
-export class CreateMealPayload {
+export class MealPayload {
   @IsDefined()
   @IsString()
   @ApiProperty({
@@ -33,8 +33,9 @@ export class CreateMealPayload {
   @ApiPropertyOptional({
     type: String,
     description: '식단 사진',
+    nullable: true,
   })
-  photo?: string;
+  photo?: string | null;
 
   @IsDefined()
   @IsDate()

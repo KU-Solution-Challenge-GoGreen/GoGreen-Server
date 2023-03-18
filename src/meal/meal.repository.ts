@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/services/prisma.service';
-import { MealCreateInput } from './type/create-meal-input.type';
+import { CreateMealInput } from './type/create-meal-input.type';
 import { MealData } from './type/meal.type';
 import * as _ from 'lodash';
 import { MealSummary } from './type/meal-summary.type';
+import { UpdateMealInput } from './type/update-meal-input.type';
 
 @Injectable()
 export class MealRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createMeal(data: MealCreateInput): Promise<MealData> {
+  async createMeal(data: CreateMealInput): Promise<MealData> {
     const meal = await this.prisma.meal.create({
       data: {
         title: data.title,
@@ -60,6 +61,25 @@ export class MealRepository {
         ) as string[],
       },
     };
+  }
+
+  async updateMeal(mealId: string, data: UpdateMealInput): Promise<MealData> {
+    await this.prisma.meal.update({
+      where: {
+        id: mealId,
+      },
+      data: {
+        title: data.title,
+        recipeId: data.recipeId,
+        description: data.description,
+        photo: data.photo,
+        date: data.date,
+      },
+      select: null,
+    });
+
+    const updatedMeal = await this.getMealById(mealId);
+    return updatedMeal!;
   }
 
   async getMealById(mealId: string): Promise<MealData | null> {
@@ -285,5 +305,18 @@ export class MealRepository {
         },
       })
       .then((count) => count > 0);
+  }
+
+  async getAuthorId(mealId: string): Promise<string> {
+    const meal = await this.prisma.meal.findUnique({
+      where: {
+        id: mealId,
+      },
+      select: {
+        userId: true,
+      },
+    });
+
+    return meal!.userId;
   }
 }

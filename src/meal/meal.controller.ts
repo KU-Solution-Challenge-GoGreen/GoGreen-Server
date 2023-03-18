@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -19,7 +20,7 @@ import { MealDto } from './dto/meal.dto';
 import { FirebaseAuthGuard } from 'src/auth/guard/auth.guard';
 import { CurrentUser } from 'src/auth/decorator/user.decorator';
 import { UserData } from 'src/auth/type/user-data.type';
-import { CreateMealPayload } from './payload/create-meal.payload';
+import { MealPayload } from './payload/meal.payload';
 import { MealSummaryListDto } from './dto/meal-summary.dto';
 import { SearchMealQuery } from './query/search-meal.query';
 import { DateQuery } from '../common/query/date.query';
@@ -36,7 +37,7 @@ export class MealController {
   @ApiCreatedResponse({ type: MealDto })
   async createMeal(
     @CurrentUser() user: UserData,
-    @Body() payload: CreateMealPayload,
+    @Body() payload: MealPayload,
   ): Promise<MealDto> {
     return this.mealService.createMeal(user.id, payload);
   }
@@ -75,5 +76,18 @@ export class MealController {
     @Query() query: DateQuery,
   ): Promise<MealSummaryListDto> {
     return this.mealService.getMealList(userId, query.date);
+  }
+
+  @Put(':mealId')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '식단 수정하기' })
+  @ApiCreatedResponse({ type: MealDto })
+  async updateMeal(
+    @CurrentUser() user: UserData,
+    @Param('mealId') mealId: string,
+    @Body() payload: MealPayload,
+  ): Promise<MealDto> {
+    return this.mealService.updateMeal(user.id, mealId, payload);
   }
 }
