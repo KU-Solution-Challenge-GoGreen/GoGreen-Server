@@ -31,7 +31,6 @@ export class UserService {
 
     const mealCountsByDate: UserMealCount[] = [];
     const dateToCountMap = new Map<string, number>();
-    const dateToSumMap = new Map<string, number>();
     const totalMealCount = meals.mealList.length;
     let totalMealFootprint = 0;
 
@@ -43,8 +42,7 @@ export class UserService {
       dateToCountMap.set(dateStr, count + 1);
 
       // 날짜별 합을 구합니다.
-      const sum = dateToSumMap.get(dateStr) ?? 0;
-      dateToSumMap.set(dateStr, sum + meal.footprint);
+      totalMealFootprint += meal.footprint;
     }
 
     // 날짜별 횟수를 포맷팅합니다.
@@ -52,17 +50,9 @@ export class UserService {
       const date = new Date(dateStr);
       mealCountsByDate.push({ date, count });
     }
-
-    // 날짜별 발자국을 합산하여 평균을 구합니다.
-    for (const [dateStr, sum] of dateToSumMap.entries()) {
-      totalMealFootprint += sum;
-    }
     const avgFootprint = totalMealFootprint / totalMealCount;
 
-    // 가입 경과 날짜를 구합니다.
-    const today = new Date();
-    const diffTime = today.getTime() - meals.createdAt.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = this.getDiffDays(meals.createdAt);
 
     return {
       id: userId,
@@ -72,5 +62,12 @@ export class UserService {
       avgFootprint,
       sinceSignUp: diffDays,
     };
+  }
+
+  private getDiffDays(startDate: Date): number {
+    // 가입 경과 날짜를 구합니다.
+    const today = new Date();
+    const diffTime = today.getTime() - startDate.getTime();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
 }

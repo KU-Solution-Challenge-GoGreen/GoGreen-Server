@@ -37,6 +37,6 @@ export class UserController {
   @ApiOperation({ summary: '사용자의 탄소발자국 관련 정보를 조회합니다.' })
   @ApiOkResponse({ type: UserInfoDto })
   async getUserInfo(@Param('userId') userId: string): Promise<UserInfoDto> {
-    return await this.userService.getUserInfo(userId);
+    return this.userService.getUserInfo(userId);
   }
 }
