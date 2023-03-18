@@ -32,8 +32,10 @@ export class UserController {
   }
 
   @Get(':userId')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: '사용자의 탄소발자국 관련 정보를 조회합니다.' })
-  @ApiCreatedResponse({ type: UserInfoDto })
+  @ApiOkResponse({ type: UserInfoDto })
   async getUserInfo(@Param('userId') userId: string): Promise<UserInfoDto> {
     return await this.userService.getUserInfo(userId);
   }

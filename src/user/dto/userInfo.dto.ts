@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserMealCountRecord } from '../type/user-meal-count-record.type';
 
 export class UserMealCountDto {
   @ApiProperty({
@@ -9,7 +8,7 @@ export class UserMealCountDto {
   date!: Date;
 
   @ApiProperty({
-    type: String,
+    type: Number,
     description: '채식 횟수',
   })
   count!: number;
@@ -33,6 +32,7 @@ export class UserInfoDto {
   // 사용자의 photo
   @ApiProperty({
     type: String,
+    nullable: true,
     description: '사용자 사진',
   })
   photo!: string | null;

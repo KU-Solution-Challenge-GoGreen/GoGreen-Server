@@ -6,7 +6,7 @@ import {
 import { UserDto } from './dto/user.dto';
 import { UserInfoDto } from './dto/userInfo.dto';
 import { UserPayload } from './payload/user.payload';
-import { UserMealCountRecord } from './type/user-meal-count-record.type';
+import { UserMealCount } from './type/user-meal-count-record.type';
 import { MealList } from './type/user-meal.type';
 import { UserRepository } from './user.repository';
 
@@ -29,10 +29,10 @@ export class UserService {
       throw new NotFoundException('존재하지 않는 사용자입니다.');
     }
 
-    const mealCountsByDate: UserMealCountRecord = { mealRecord: [] };
+    const mealCountsByDate: UserMealCount[] = [];
     const dateToCountMap = new Map<string, number>();
     const dateToSumMap = new Map<string, number>();
-    let totalMealCount = 0;
+    const totalMealCount = meals.mealList.length;
     let totalMealFootprint = 0;
 
     for (const meal of meals.mealList) {
@@ -50,8 +50,7 @@ export class UserService {
     // 날짜별 횟수를 포맷팅합니다.
     for (const [dateStr, count] of dateToCountMap.entries()) {
       const date = new Date(dateStr);
-      mealCountsByDate.mealRecord.push({ date, count });
-      totalMealCount += count;
+      mealCountsByDate.push({ date, count });
     }
 
     // 날짜별 발자국을 합산하여 평균을 구합니다.
@@ -69,7 +68,7 @@ export class UserService {
       id: userId,
       name: meals.name,
       photo: meals.photo,
-      mealCount: mealCountsByDate.mealRecord,
+      mealCount: mealCountsByDate,
       avgFootprint,
       sinceSignUp: diffDays,
     };
