@@ -1,7 +1,8 @@
-import { Body, Controller, Param, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -9,6 +10,7 @@ import { CurrentUser } from 'src/auth/decorator/user.decorator';
 import { FirebaseAuthGuard } from 'src/auth/guard/auth.guard';
 import { UserData } from 'src/auth/type/user-data.type';
 import { UserDto } from './dto/user.dto';
+import { UserInfoDto } from './dto/userInfo.dto';
 import { UserPayload } from './payload/user.payload';
 import { UserService } from './user.service';
 
@@ -27,5 +29,14 @@ export class UserController {
     @Body() payload: UserPayload,
   ): Promise<UserDto> {
     return this.userService.updateUser(userId, payload);
+  }
+
+  @Get(':userId')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '사용자의 탄소발자국 관련 정보를 조회합니다.' })
+  @ApiOkResponse({ type: UserInfoDto })
+  async getUserInfo(@Param('userId') userId: string): Promise<UserInfoDto> {
+    return this.userService.getUserInfo(userId);
   }
 }
