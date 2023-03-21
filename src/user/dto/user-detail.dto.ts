@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UserDto } from './user.dto';
 
 export class UserMealCountDto {
   @ApiProperty({
@@ -14,29 +15,7 @@ export class UserMealCountDto {
   count!: number;
 }
 
-export class UserInfoDto {
-  // 사용자의 id
-  @ApiProperty({
-    type: String,
-    description: '유저 Id',
-  })
-  id!: string;
-
-  // 사용자의 name
-  @ApiProperty({
-    type: String,
-    description: '닉네임',
-  })
-  name!: string;
-
-  // 사용자의 photo
-  @ApiProperty({
-    type: String,
-    nullable: true,
-    description: '사용자 사진',
-  })
-  photo!: string | null;
-
+export class UserDetailDto extends UserDto {
   // 사용자의 6개월치 채식 횟수
   @ApiProperty({
     type: [UserMealCountDto],

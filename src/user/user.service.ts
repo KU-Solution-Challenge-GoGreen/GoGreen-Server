@@ -1,10 +1,6 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
-import { UserInfoDto } from './dto/userInfo.dto';
+import { UserDetailDto } from './dto/user-detail.dto';
 import { UserPayload } from './payload/user.payload';
 import { UserMealCount } from './type/user-meal-count-record.type';
 import { MealList } from './type/user-meal.type';
@@ -22,7 +18,7 @@ export class UserService {
     return UserDto.of(user);
   }
 
-  async getUserInfo(userId: string): Promise<UserInfoDto> {
+  async getUserInfo(userId: string): Promise<UserDetailDto> {
     const meals: MealList | null =
       await this.userRepository.getMealListByUserId(userId);
     if (!meals) {
