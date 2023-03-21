@@ -17,6 +17,7 @@ export class UserDto {
   @ApiProperty({
     type: String,
     description: '사용자 사진',
+    nullable: true,
   })
   photo!: string | null;
 

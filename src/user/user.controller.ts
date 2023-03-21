@@ -6,11 +6,9 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CurrentUser } from 'src/auth/decorator/user.decorator';
 import { FirebaseAuthGuard } from 'src/auth/guard/auth.guard';
-import { UserData } from 'src/auth/type/user-data.type';
 import { UserDto } from './dto/user.dto';
-import { UserInfoDto } from './dto/userInfo.dto';
+import { UserDetailDto } from './dto/user-detail.dto';
 import { UserPayload } from './payload/user.payload';
 import { UserService } from './user.service';
 
@@ -35,8 +33,8 @@ export class UserController {
   @UseGuards(FirebaseAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: '사용자의 탄소발자국 관련 정보를 조회합니다.' })
-  @ApiOkResponse({ type: UserInfoDto })
-  async getUserInfo(@Param('userId') userId: string): Promise<UserInfoDto> {
+  @ApiOkResponse({ type: UserDetailDto })
+  async getUserInfo(@Param('userId') userId: string): Promise<UserDetailDto> {
     return this.userService.getUserInfo(userId);
   }
 }
