@@ -5,6 +5,7 @@ import { CategoryWithIngredientList } from './type/category-with-ingredient-list
 import { IngredientBulkCreatePayload } from './payload/ingredient-bulk-create.payload';
 import * as _ from 'lodash';
 import { IngredientCreateInput } from './type/ingredient-create-input.type';
+import { Ingredient } from './type/ingredient.type';
 
 @Injectable()
 export class IngredientService {
@@ -29,6 +30,10 @@ export class IngredientService {
     );
 
     return this.ingredientRepository.bulkCreateIngredient(ingredientList);
+  }
+
+  async getIngredientList(): Promise<Ingredient[]> {
+    return [];
   }
 
   async getIngredientById(

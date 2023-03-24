@@ -10,6 +10,7 @@ import { IngredientWithCategoryDto } from './dto/ingredient-with-category.dto';
 import { CategoryWithIngredientListDto } from './dto/category-with-ingredient-list.dto';
 import { BulkCreateDto } from '../common/dto/bulk-create.dto';
 import { IngredientBulkCreatePayload } from './payload/ingredient-bulk-create.payload';
+import { IngredientListDto } from './dto/ingredient-list.dto';
 
 @Controller('ingredients')
 @ApiTags('Ingredient API')
@@ -27,14 +28,12 @@ export class IngredientController {
     );
   }
 
-  @Get(':ingredientId')
-  @ApiOperation({ summary: 'id로 재료 정보 가져오기' })
-  @ApiOkResponse({ type: IngredientWithCategoryDto })
-  async getIngredientById(
-    @Param('ingredientId') ingredientId: string,
-  ): Promise<IngredientWithCategoryDto> {
-    return IngredientWithCategoryDto.of(
-      await this.ingredientService.getIngredientById(ingredientId),
+  @Get()
+  @ApiOperation({ summary: '모든 재료 정보 가져오기' })
+  @ApiOkResponse({ type: [IngredientListDto] })
+  async getIngredientList(): Promise<IngredientListDto> {
+    return IngredientListDto.of(
+      await this.ingredientService.getIngredientList(),
     );
   }
 
@@ -46,6 +45,17 @@ export class IngredientController {
   ): Promise<CategoryWithIngredientListDto> {
     return CategoryWithIngredientListDto.of(
       await this.ingredientService.getCategoryWithIngredientList(categoryId),
+    );
+  }
+
+  @Get(':ingredientId')
+  @ApiOperation({ summary: 'id로 재료 정보 가져오기' })
+  @ApiOkResponse({ type: IngredientWithCategoryDto })
+  async getIngredientById(
+    @Param('ingredientId') ingredientId: string,
+  ): Promise<IngredientWithCategoryDto> {
+    return IngredientWithCategoryDto.of(
+      await this.ingredientService.getIngredientById(ingredientId),
     );
   }
 }
