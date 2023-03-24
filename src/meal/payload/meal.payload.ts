@@ -43,6 +43,7 @@ export class MealPayload {
   @ApiProperty({
     type: Date,
     description: '식단 날짜',
+    example: '2021-08-01',
   })
   date!: Date;
 }
