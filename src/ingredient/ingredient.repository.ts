@@ -3,6 +3,7 @@ import { PrismaService } from '../common/services/prisma.service';
 import { IngredientWithCategory } from './type/ingredient-with-category.type';
 import { CategoryWithIngredientList } from './type/category-with-ingredient-list.type';
 import { IngredientCreateInput } from './type/ingredient-create-input.type';
+import { Ingredient } from './type/ingredient.type';
 
 @Injectable()
 export class IngredientRepository {
@@ -33,6 +34,16 @@ export class IngredientRepository {
             name: true,
           },
         },
+      },
+    });
+  }
+
+  async getIngredientList(): Promise<Ingredient[]> {
+    return this.prisma.ingredient.findMany({
+      select: {
+        id: true,
+        name: true,
+        carbonFootprint: true,
       },
     });
   }
