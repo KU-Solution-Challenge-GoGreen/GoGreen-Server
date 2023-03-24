@@ -33,7 +33,7 @@ export class IngredientService {
   }
 
   async getIngredientList(): Promise<Ingredient[]> {
-    return [];
+    return this.ingredientRepository.getIngredientList();
   }
 
   async getIngredientById(
