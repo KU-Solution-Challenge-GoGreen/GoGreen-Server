@@ -61,15 +61,15 @@ model RecipeStep {
 }
 
 model Meal {
-  id          String   @id @default(uuid())
-  userId      String   @map("user_id")
-  recipeId    String   @map("recipe_id")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  title       String
-  description String?
-  photo       String?
-  date        DateTime @db.Date
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  recipeId  String   @map("recipe_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  title     String
+  memo      String?
+  photo     String?
+  date      DateTime @db.Date
 
   User   User   @relation(fields: [userId], references: [id])
   Recipe Recipe @relation(fields: [recipeId], references: [id])
