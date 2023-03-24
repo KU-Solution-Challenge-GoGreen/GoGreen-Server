@@ -45,6 +45,7 @@ export class MealDto {
   @ApiProperty({
     type: String,
     description: '식단 사진',
+    nullable: true,
   })
   photo!: string | null;
 

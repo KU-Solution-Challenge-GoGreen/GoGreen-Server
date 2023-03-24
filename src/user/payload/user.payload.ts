@@ -1,5 +1,5 @@
 import { IsDefined, IsOptional, IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UserPayload {
   @IsDefined()
@@ -12,7 +12,7 @@ export class UserPayload {
 
   @IsOptional()
   @IsString()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
     description: '사용자 사진',
     nullable: true,
