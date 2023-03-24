@@ -1,9 +1,7 @@
+import { Ingredient } from './ingredient.type';
+
 export type CategoryWithIngredientList = {
   id: string;
   name: string;
-  Ingredient: {
-    id: string;
-    name: string;
-    carbonFootprint: number;
-  }[];
+  Ingredient: Ingredient[];
 };
