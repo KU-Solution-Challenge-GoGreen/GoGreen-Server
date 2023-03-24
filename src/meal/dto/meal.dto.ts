@@ -1,6 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { number } from 'joi';
-import * as _ from 'lodash';
 import { RecipeSummaryDto } from 'src/recipe/dto/recipe-summary.dto';
 import { MealData } from '../type/meal.type';
 
@@ -34,7 +32,7 @@ export class MealDto {
     description: '식단 설명',
     nullable: true,
   })
-  description!: string | null;
+  memo!: string | null;
 
   @ApiProperty({
     type: String,
@@ -55,21 +53,13 @@ export class MealDto {
   date!: Date;
 
   static of(meal: MealData): MealDto {
-    const {
-      id,
-      title,
-      userId,
-      description,
-      recipe,
-      date,
-      photo,
-      carbonFootprint,
-    } = meal;
+    const { id, title, userId, memo, recipe, date, photo, carbonFootprint } =
+      meal;
     return {
       id,
       title,
       userId,
-      description,
+      memo,
       recipe,
       photo,
       date,

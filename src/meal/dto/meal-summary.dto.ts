@@ -25,7 +25,7 @@ export class MealSummaryDto {
     description: '식단 설명',
     nullable: true,
   })
-  description!: string | null;
+  memo!: string | null;
 
   @ApiProperty({
     type: String,
@@ -72,7 +72,7 @@ export class MealSummaryListDto {
         id: meal.id,
         userId: meal.userId,
         title: meal.title,
-        description: meal.description,
+        memo: meal.memo,
         recipeName: meal.recipe.name,
         categoryIds: meal.categories,
         photo: meal.photo,

@@ -26,7 +26,7 @@ export class MealPayload {
     description: '식단 설명',
     nullable: true,
   })
-  description?: string | null;
+  memo?: string | null;
 
   @IsOptional()
   @IsString()

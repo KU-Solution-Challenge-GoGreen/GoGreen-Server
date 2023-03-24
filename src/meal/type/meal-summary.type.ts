@@ -2,7 +2,7 @@ export type MealSummary = {
   id: string;
   userId: string;
   title: string;
-  description: string | null;
+  memo: string | null;
   recipe: {
     name: string;
     carbonFootprint: number;

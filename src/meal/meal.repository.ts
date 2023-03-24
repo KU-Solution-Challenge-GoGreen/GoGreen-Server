@@ -16,7 +16,7 @@ export class MealRepository {
         title: data.title,
         userId: data.userId,
         recipeId: data.recipeId,
-        description: data.description,
+        memo: data.memo,
         photo: data.photo,
         date: data.date,
       },
@@ -24,7 +24,7 @@ export class MealRepository {
         id: true,
         title: true,
         userId: true,
-        description: true,
+        memo: true,
         date: true,
         photo: true,
         Recipe: {
@@ -49,7 +49,7 @@ export class MealRepository {
       id: meal.id,
       title: meal.title,
       userId: meal.userId,
-      description: meal.description,
+      memo: meal.memo,
       date: meal.date,
       photo: meal.photo,
       carbonFootprint: meal.Recipe.carbonFootprint,
@@ -71,7 +71,7 @@ export class MealRepository {
       data: {
         title: data.title,
         recipeId: data.recipeId,
-        description: data.description,
+        memo: data.memo,
         photo: data.photo,
         date: data.date,
       },
@@ -99,7 +99,7 @@ export class MealRepository {
         id: true,
         title: true,
         userId: true,
-        description: true,
+        memo: true,
         date: true,
         photo: true,
         Recipe: {
@@ -136,7 +136,7 @@ export class MealRepository {
       id: meal.id,
       title: meal.title,
       userId: meal.userId,
-      description: meal.description,
+      memo: meal.memo,
       date: meal.date,
       photo: meal.photo,
       carbonFootprint: recipe!.carbonFootprint,
@@ -173,7 +173,7 @@ export class MealRepository {
         id: true,
         title: true,
         userId: true,
-        description: true,
+        memo: true,
         date: true,
         photo: true,
         Recipe: {
@@ -199,7 +199,7 @@ export class MealRepository {
       id: meal.id,
       title: meal.title,
       userId: meal.userId,
-      description: meal.description,
+      memo: meal.memo,
       date: meal.date,
       photo: meal.photo,
 
@@ -252,7 +252,7 @@ export class MealRepository {
         id: true,
         title: true,
         userId: true,
-        description: true,
+        memo: true,
         date: true,
         photo: true,
         Recipe: {
@@ -278,7 +278,7 @@ export class MealRepository {
       id: meal.id,
       title: meal.title,
       userId: meal.userId,
-      description: meal.description,
+      memo: meal.memo,
       date: meal.date,
       photo: meal.photo,
       recipe: {
@@ -313,18 +313,5 @@ export class MealRepository {
         },
       })
       .then((count) => count > 0);
-  }
-
-  async getAuthorId(mealId: string): Promise<string> {
-    const meal = await this.prisma.meal.findUnique({
-      where: {
-        id: mealId,
-      },
-      select: {
-        userId: true,
-      },
-    });
-
-    return meal!.userId;
   }
 }

@@ -4,7 +4,7 @@ export type MealData = {
   id: string;
   title: string;
   userId: string;
-  description: string | null;
+  memo: string | null;
   photo: string | null;
   carbonFootprint: number;
   date: Date;

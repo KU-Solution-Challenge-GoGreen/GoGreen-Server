@@ -22,7 +22,7 @@ export class MealService {
     const input: CreateMealInput = {
       userId,
       title: payload.title,
-      description: payload.description ?? null,
+      memo: payload.memo ?? null,
       photo: payload.photo ?? null,
       date: payload.date,
       recipeId: payload.recipeId,
@@ -80,7 +80,7 @@ export class MealService {
 
     const input: UpdateMealInput = {
       title: payload.title,
-      description: payload.description ?? null,
+      memo: payload.memo ?? null,
       photo: payload.photo ?? null,
       date: payload.date,
       recipeId: payload.recipeId,

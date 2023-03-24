@@ -1,7 +1,7 @@
 export type UpdateMealInput = {
   title: string;
   recipeId: string;
-  description: string | null;
+  memo: string | null;
   photo: string | null;
   date: Date;
 };
