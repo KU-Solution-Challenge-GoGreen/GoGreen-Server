@@ -216,7 +216,15 @@ export class MealRepository {
   }
 
   async getPossibleIngredientIds(typeId?: string): Promise<string[]> {
-    const ingredients = await this.prisma.veganType.findUnique({
+    if (!typeId) {
+      const ingredients = await this.prisma.ingredient.findMany({
+        select: {
+          id: true,
+        },
+      });
+      return ingredients.map((i) => i.id);
+    }
+    const ingredients = await this.prisma.veganType.findFirst({
       where: {
         id: typeId,
       },
