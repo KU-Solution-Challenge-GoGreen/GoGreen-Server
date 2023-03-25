@@ -8,31 +8,7 @@ import { MealList } from './type/user-meal.type';
 export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async updateUser(
-    userId: string,
-    data: UserPayload,
-  ): Promise<UserData | null> {
-    const userValid = await this.prisma.meal.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        id: true,
-      },
-    });
-    if (!userValid) return null;
-
-    const nameValid = await this.prisma.user.findFirst({
-      where: {
-        name: data.name,
-        deletedAt: null,
-      },
-      select: {
-        id: true,
-      },
-    });
-    if (nameValid) return null;
-
+  async updateUser(userId: string, data: UserPayload): Promise<UserData> {
     const user = await this.prisma.user.update({
       where: {
         id: userId,
@@ -43,12 +19,11 @@ export class UserRepository {
       },
     });
 
-    const resData: UserData = {
+    return {
       id: user.id,
       name: user.name,
       photo: user.photo,
     };
-    return resData;
   }
 
   async getMealListByUserId(userId: string): Promise<MealList | null> {
@@ -90,5 +65,32 @@ export class UserRepository {
       photo: userInfo.photo,
       mealList: mealList,
     };
+  }
+
+  async getUserInfo(userId: string): Promise<UserData | null> {
+    const userInfo = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, name: true, photo: true },
+    });
+    if (!userInfo) return null;
+
+    return {
+      id: userInfo.id,
+      name: userInfo.name,
+      photo: userInfo.photo,
+    };
+  }
+
+  async checkDuplicateName(name: string): Promise<boolean> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        name: name,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+      },
+    });
+    return !!user;
   }
 }
