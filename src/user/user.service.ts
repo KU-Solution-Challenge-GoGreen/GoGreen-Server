@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
 import { UserDetailDto } from './dto/user-detail.dto';
 import { UserPayload } from './payload/user.payload';
@@ -11,11 +15,24 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async updateUser(userId: string, payload: UserPayload) {
-    const user = await this.userRepository.updateUser(userId, payload);
+    const user = await this.userRepository.getUserInfo(userId);
     if (!user) {
       throw new NotFoundException('존재하지 않는 사용자입니다.');
     }
-    return UserDto.of(user);
+
+    if (user.name !== payload.name) {
+      const nameCheck = await this.userRepository.checkDuplicateName(
+        payload.name,
+      );
+
+      if (nameCheck) {
+        throw new ConflictException('이미 존재하는 이름입니다.');
+      }
+    }
+
+    const updatedUser = await this.userRepository.updateUser(userId, payload);
+
+    return UserDto.of(updatedUser);
   }
 
   async getUserInfo(userId: string): Promise<UserDetailDto> {
