@@ -41,10 +41,10 @@ export class MealService {
 
   async searchMeal(
     userId: string,
-    typeId?: string,
+    typeId?: string | null,
   ): Promise<MealSummaryListDto> {
     const possibleIngredientIds =
-      await this.mealRepository.getPossibleIngredientIds(typeId);
+      await this.mealRepository.getPossibleIngredientIds(typeId ?? undefined);
 
     if (possibleIngredientIds.length === 0) {
       throw new NotFoundException('잘못된 vegan type입니다.');

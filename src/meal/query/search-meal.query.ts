@@ -1,11 +1,13 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class SearchMealQuery {
+  @IsOptional()
   @IsString()
   @ApiPropertyOptional({
     type: String,
     description: '비건 타입',
+    nullable: true,
   })
-  typeId?: string;
+  typeId?: string | null;
 }

@@ -34,7 +34,7 @@ export class MealSummaryDto {
   recipeName!: string;
 
   @ApiProperty({
-    type: String,
+    type: [String],
     description: '재료 카테고리 리스트',
   })
   categoryIds!: string[];
