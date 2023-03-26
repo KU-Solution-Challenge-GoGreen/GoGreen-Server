@@ -4,7 +4,7 @@ import { VeganTypeController } from './vegan-type.controller';
 import { VeganTypeRepository } from './vegan-type.repository';
 
 @Module({
-  providers: [VeganTypeService],
-  controllers: [VeganTypeController, VeganTypeRepository],
+  providers: [VeganTypeService, VeganTypeRepository],
+  controllers: [VeganTypeController],
 })
 export class VeganTypeModule {}
