@@ -9,6 +9,7 @@ import { IngredientModule } from '../ingredient/ingredient.module';
 import { RecipeModule } from '../recipe/recipe.module';
 import { MealModule } from '../meal/meal.module';
 import { UserModule } from 'src/user/user.module';
+import { VeganTypeModule } from '../vegan-type/vegan-type.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserModule } from 'src/user/user.module';
     RecipeModule,
     MealModule,
     UserModule,
+    VeganTypeModule,
   ],
   controllers: [AppController],
 })
