@@ -172,7 +172,12 @@ export class MealRepository {
       select: {
         id: true,
         title: true,
-        userId: true,
+        User: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         memo: true,
         date: true,
         photo: true,
@@ -198,7 +203,10 @@ export class MealRepository {
     return meals.map((meal) => ({
       id: meal.id,
       title: meal.title,
-      userId: meal.userId,
+      user: {
+        id: meal.User.id,
+        name: meal.User.name,
+      },
       memo: meal.memo,
       date: meal.date,
       photo: meal.photo,
@@ -259,7 +267,12 @@ export class MealRepository {
       select: {
         id: true,
         title: true,
-        userId: true,
+        User: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         memo: true,
         date: true,
         photo: true,
@@ -285,7 +298,10 @@ export class MealRepository {
     return meals.map((meal) => ({
       id: meal.id,
       title: meal.title,
-      userId: meal.userId,
+      user: {
+        id: meal.User.id,
+        name: meal.User.name,
+      },
       memo: meal.memo,
       date: meal.date,
       photo: meal.photo,

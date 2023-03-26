@@ -1,6 +1,9 @@
 export type MealSummary = {
   id: string;
-  userId: string;
+  user: {
+    id: string;
+    name: string;
+  };
   title: string;
   memo: string | null;
   recipe: {
