@@ -16,6 +16,12 @@ export class MealSummaryDto {
 
   @ApiProperty({
     type: String,
+    description: '식단 작성자 이름',
+  })
+  userName!: string;
+
+  @ApiProperty({
+    type: String,
     description: '식단 이름',
   })
   title!: string;
@@ -70,7 +76,8 @@ export class MealSummaryListDto {
     return {
       meals: meals.map((meal) => ({
         id: meal.id,
-        userId: meal.userId,
+        userId: meal.user.id,
+        userName: meal.user.name,
         title: meal.title,
         memo: meal.memo,
         recipeName: meal.recipe.name,
