@@ -63,7 +63,8 @@ export class UserService {
       const date = new Date(dateStr);
       mealCountsByDate.push({ date, count });
     }
-    const avgFootprint = totalMealFootprint / totalMealCount;
+    const avgFootprint =
+      totalMealCount === 0 ? 0 : totalMealFootprint / totalMealCount;
 
     const diffDays = this.getDiffDays(meals.createdAt);
 
