@@ -41,7 +41,7 @@ export class UserRepository {
         userId: userId,
         date: {
           gte: startDate,
-          lt: curDate,
+          lte: curDate,
         },
       },
       select: {
