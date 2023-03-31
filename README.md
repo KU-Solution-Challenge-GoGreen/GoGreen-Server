@@ -34,7 +34,7 @@ GoGreen offers features that allows users to easily input their daily meals, vie
 
  <br/>
 
-## 📲 API Documentation
+## 📲 API Documentation
 
 https://gogreen-ezea7fgm5q-du.a.run.app/docs
 
