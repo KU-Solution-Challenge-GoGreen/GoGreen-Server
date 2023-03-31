@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { IngredientService } from './ingredient.service';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
@@ -11,6 +12,7 @@ import { CategoryWithIngredientListDto } from './dto/category-with-ingredient-li
 import { BulkCreateDto } from '../common/dto/bulk-create.dto';
 import { IngredientBulkCreatePayload } from './payload/ingredient-bulk-create.payload';
 import { IngredientListDto } from './dto/ingredient-list.dto';
+import { FirebaseAuthGuard } from '../auth/guard/auth.guard';
 
 @Controller('ingredients')
 @ApiTags('Ingredient API')
@@ -18,6 +20,8 @@ export class IngredientController {
   constructor(private readonly ingredientService: IngredientService) {}
 
   @Post('bulk')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: '재료 정보 일괄 등록' })
   @ApiCreatedResponse({ type: BulkCreateDto })
   async bulkCreateIngredient(
@@ -29,6 +33,8 @@ export class IngredientController {
   }
 
   @Get()
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: '모든 재료 정보 가져오기' })
   @ApiOkResponse({ type: [IngredientListDto] })
   async getIngredientList(): Promise<IngredientListDto> {
@@ -38,6 +44,8 @@ export class IngredientController {
   }
 
   @Get('categories/:categoryId')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: '특정 카테고리의 재료 정보 가져오기' })
   @ApiOkResponse({ type: [CategoryWithIngredientListDto] })
   async getCategoryWithIngredientList(
@@ -49,6 +57,8 @@ export class IngredientController {
   }
 
   @Get(':ingredientId')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'id로 재료 정보 가져오기' })
   @ApiOkResponse({ type: IngredientWithCategoryDto })
   async getIngredientById(

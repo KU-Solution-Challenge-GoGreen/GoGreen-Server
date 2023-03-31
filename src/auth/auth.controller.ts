@@ -69,6 +69,8 @@ export class AuthController {
   }
 
   @Get('name/:name/duplicate')
+  @UseGuards(FirebaseAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: '이름이 중복인지 확인합니다.' })
   @ApiOkResponse({
     type: CheckDuplicateDto,
